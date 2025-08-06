@@ -15,23 +15,13 @@ export default function ContactApp() {
           </div>
         </div>
 
-        <div className="flex items-center space-x-4 p-6 bg-gradient-to-r from-emerald-50 to-emerald-100 rounded-xl border border-emerald-200">
-          <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center">
-            <Settings className="w-7 h-7 text-white" />
-          </div>
-          <div>
-            <p className="font-semibold text-gray-900 text-lg">LinkedIn</p>
-            <p className="text-gray-600 text-lg">linkedin.com/in/alexjohnson</p>
-          </div>
-        </div>
-
         <div className="flex items-center space-x-4 p-6 bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl border border-purple-200">
           <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
             <Code className="w-7 h-7 text-white" />
           </div>
           <div>
             <p className="font-semibold text-gray-900 text-lg">GitHub</p>
-            <p className="text-gray-600 text-lg">github.com/alexjohnson</p>
+            <p className="text-gray-600 text-lg">github.com/MBeggiato</p>
           </div>
         </div>
 
