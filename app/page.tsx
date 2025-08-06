@@ -17,6 +17,7 @@ import GamesApp from "@/components/apps/GamesApp";
 import BrowserApp from "@/components/apps/BrowserApp";
 import DownloadsApp from "@/components/apps/DownloadsApp";
 import SecretApp from "@/components/apps/SecretApp";
+import MarkdownEditorApp from "@/components/apps/MarkdownEditorApp";
 
 export default function ModernOSHomepage() {
   const [openWindows, setOpenWindows] = useState<string[]>([]);
@@ -109,6 +110,13 @@ export default function ModernOSHomepage() {
         isMinimized: false,
         isMaximized: false,
         zIndex: 30,
+      },
+      markdown: {
+        position: { x: 250, y: 150 },
+        size: { width: 900, height: 650 },
+        isMinimized: false,
+        isMaximized: false,
+        zIndex: 9,
       },
     }
   );
@@ -796,6 +804,22 @@ export default function ModernOSHomepage() {
           onUpdateState={(updates) => updateWindowState("downloads", updates)}
         >
           <DownloadsApp />
+        </ModernWindow>
+      )}
+
+      {openWindows.includes("markdown") && (
+        <ModernWindow
+          windowId="markdown"
+          title="Markdown Editor"
+          isActive={activeWindow === "markdown"}
+          windowState={windowStates.markdown}
+          onClose={() => closeWindow("markdown")}
+          onMinimize={() => minimizeWindow("markdown")}
+          onMaximize={() => maximizeWindow("markdown")}
+          onFocus={() => bringToFront("markdown")}
+          onUpdateState={(updates) => updateWindowState("markdown", updates)}
+        >
+          <MarkdownEditorApp />
         </ModernWindow>
       )}
 

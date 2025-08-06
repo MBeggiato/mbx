@@ -1,4 +1,4 @@
-import { User, Folder, Mail, BookOpen, Github } from "lucide-react";
+import { User, Folder, Mail, BookOpen, Github, FileText } from "lucide-react";
 
 interface DesktopProps {
   onToggleWindow: (windowId: string) => void;
@@ -64,6 +64,18 @@ export default function Desktop({
         </div>
         <span className="text-white text-sm font-medium drop-shadow-lg">
           Guest Book
+        </span>
+      </div>
+
+      <div
+        className="flex flex-col items-center cursor-pointer group"
+        onClick={() => onToggleWindow("markdown")}
+      >
+        <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl shadow-lg flex items-center justify-center mb-3 group-hover:scale-105 transition-transform duration-200">
+          <FileText className="w-8 h-8 text-white" />
+        </div>
+        <span className="text-white text-sm font-medium drop-shadow-lg">
+          Markdown Editor
         </span>
       </div>
 
