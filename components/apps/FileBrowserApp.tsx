@@ -332,76 +332,119 @@ export default function FileBrowserApp() {
     return (
       <ContextMenu>
         <ContextMenuTrigger asChild>
-          <Card
+          <div
             className={`cursor-pointer transition-all hover:shadow-md ${
               isSelected
                 ? "ring-2 ring-blue-500 bg-blue-50"
                 : "hover:bg-muted/50"
             }`}
-            onClick={(e) => handleFileSelect(file.id, e.ctrlKey || e.metaKey)}
-            onDoubleClick={() => handleFileDoubleClick(file)}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleFileSelect(file.id, e.ctrlKey || e.metaKey);
+            }}
+            onDoubleClick={(e) => {
+              e.stopPropagation();
+              handleFileDoubleClick(file);
+            }}
+            onContextMenu={(e) => {
+              e.stopPropagation();
+              console.log("Context menu triggered for:", file.name);
+              if (!selectedFiles.has(file.id)) {
+                setSelectedFiles(new Set([file.id]));
+              }
+            }}
           >
-            <CardContent className="p-4">
-              {viewMode === "grid" ? (
-                <div className="text-center">
-                  <Icon
-                    className={`h-8 w-8 mx-auto mb-2 ${
-                      FILE_TYPE_COLORS[file.type]
-                    }`}
-                  />
-                  <div
-                    className="text-sm font-medium truncate"
-                    title={file.name}
-                  >
-                    {file.name}
-                  </div>
-                  <div className="text-xs text-muted-foreground mt-1">
-                    {formatFileSize(file.size)}
-                  </div>
-                  <Badge variant="secondary" className="text-xs mt-1">
-                    {file.type}
-                  </Badge>
-                </div>
-              ) : (
-                <div className="flex items-center space-x-3">
-                  <Icon className={`h-5 w-5 ${FILE_TYPE_COLORS[file.type]}`} />
-                  <div className="flex-1 min-w-0">
-                    <div className="font-medium truncate">{file.name}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {new Date(file.updatedAt).toLocaleDateString()} •{" "}
+            <Card className="border-0 shadow-none">
+              <CardContent className="p-4">
+                {viewMode === "grid" ? (
+                  <div className="text-center">
+                    <Icon
+                      className={`h-8 w-8 mx-auto mb-2 ${
+                        FILE_TYPE_COLORS[file.type]
+                      }`}
+                    />
+                    <div
+                      className="text-sm font-medium truncate"
+                      title={file.name}
+                    >
+                      {file.name}
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-1">
                       {formatFileSize(file.size)}
                     </div>
+                    <Badge variant="secondary" className="text-xs mt-1">
+                      {file.type}
+                    </Badge>
                   </div>
-                  <Badge variant="secondary" className="text-xs">
-                    {file.type}
-                  </Badge>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+                ) : (
+                  <div className="flex items-center space-x-3">
+                    <Icon
+                      className={`h-5 w-5 ${FILE_TYPE_COLORS[file.type]}`}
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium truncate">{file.name}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {new Date(file.updatedAt).toLocaleDateString()} •{" "}
+                        {formatFileSize(file.size)}
+                      </div>
+                    </div>
+                    <Badge variant="secondary" className="text-xs">
+                      {file.type}
+                    </Badge>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
         </ContextMenuTrigger>
-        <ContextMenuContent>
-          <ContextMenuItem onClick={() => handleFileDoubleClick(file)}>
+        <ContextMenuContent className="w-64 z-50">
+          <ContextMenuItem
+            onClick={(e) => {
+              e.stopPropagation();
+              console.log("Open clicked for:", file.name);
+              handleFileDoubleClick(file);
+            }}
+          >
             <Eye className="h-4 w-4 mr-2" />
             Open
           </ContextMenuItem>
           {(file.type === "markdown" ||
             file.type === "text" ||
             file.type === "json") && (
-            <ContextMenuItem onClick={() => handleOpenInMarkdownEditor(file)}>
+            <ContextMenuItem
+              onClick={(e) => {
+                e.stopPropagation();
+                console.log("Open in Markdown Editor clicked for:", file.name);
+                handleOpenInMarkdownEditor(file);
+              }}
+            >
               <Edit className="h-4 w-4 mr-2" />
               Open in Markdown Editor
             </ContextMenuItem>
           )}
           <ContextMenuSeparator />
-          <ContextMenuItem onClick={() => showFileInfo(file)}>
+          <ContextMenuItem
+            onClick={(e) => {
+              e.stopPropagation();
+              console.log("Properties clicked for:", file.name);
+              showFileInfo(file);
+            }}
+          >
             <Info className="h-4 w-4 mr-2" />
             Properties
           </ContextMenuItem>
           <ContextMenuSeparator />
           <ContextMenuItem
-            onClick={() => handleDeleteSelected()}
-            className="text-red-600"
+            onClick={(e) => {
+              e.stopPropagation();
+              console.log("Delete clicked for:", file.name);
+              if (confirm(`Are you sure you want to delete "${file.name}"?`)) {
+                deleteFile(file.id);
+                setSelectedFiles(new Set());
+                refreshFiles();
+              }
+            }}
+            className="text-red-600 focus:text-red-600"
           >
             <Trash2 className="h-4 w-4 mr-2" />
             Delete

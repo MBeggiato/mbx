@@ -19,6 +19,7 @@ import DownloadsApp from "@/components/apps/DownloadsApp";
 import SecretApp from "@/components/apps/SecretApp";
 import MarkdownEditorApp from "@/components/apps/MarkdownEditorApp";
 import FileBrowserApp from "@/components/apps/FileBrowserApp";
+import ChangelogApp from "@/components/apps/ChangelogApp";
 
 export default function ModernOSHomepage() {
   const [openWindows, setOpenWindows] = useState<string[]>([]);
@@ -69,6 +70,13 @@ export default function ModernOSHomepage() {
         isMinimized: false,
         isMaximized: false,
         zIndex: 16,
+      },
+      changelog: {
+        position: { x: 250, y: 150 },
+        size: { width: 800, height: 650 },
+        isMinimized: false,
+        isMaximized: false,
+        zIndex: 15,
       },
       musicpro: {
         position: { x: 300, y: 180 },
@@ -751,6 +759,22 @@ export default function ModernOSHomepage() {
           onUpdateState={(updates) => updateWindowState("calculator", updates)}
         >
           <CalculatorApp />
+        </ModernWindow>
+      )}
+
+      {openWindows.includes("changelog") && (
+        <ModernWindow
+          windowId="changelog"
+          title="Changelog"
+          isActive={activeWindow === "changelog"}
+          windowState={windowStates.changelog}
+          onClose={() => closeWindow("changelog")}
+          onMinimize={() => minimizeWindow("changelog")}
+          onMaximize={() => maximizeWindow("changelog")}
+          onFocus={() => bringToFront("changelog")}
+          onUpdateState={(updates) => updateWindowState("changelog", updates)}
+        >
+          <ChangelogApp />
         </ModernWindow>
       )}
 

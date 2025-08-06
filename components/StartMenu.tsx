@@ -19,6 +19,7 @@ import {
   Monitor,
   HardDrive,
   Edit,
+  GitBranch,
 } from "lucide-react";
 
 interface StartMenuProps {
@@ -37,6 +38,12 @@ const apps = [
 
 const systemApps = [
   { id: "calculator", name: "Calculator", icon: Calculator, category: "Tools" },
+  {
+    id: "changelog",
+    name: "Changelog",
+    icon: GitBranch,
+    category: "System",
+  },
   {
     id: "markdown",
     name: "Markdown Editor",
