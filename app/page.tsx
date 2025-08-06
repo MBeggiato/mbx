@@ -18,6 +18,7 @@ import BrowserApp from "@/components/apps/BrowserApp";
 import DownloadsApp from "@/components/apps/DownloadsApp";
 import SecretApp from "@/components/apps/SecretApp";
 import MarkdownEditorApp from "@/components/apps/MarkdownEditorApp";
+import FileBrowserApp from "@/components/apps/FileBrowserApp";
 
 export default function ModernOSHomepage() {
   const [openWindows, setOpenWindows] = useState<string[]>([]);
@@ -111,12 +112,19 @@ export default function ModernOSHomepage() {
         isMaximized: false,
         zIndex: 30,
       },
-      markdown: {
-        position: { x: 250, y: 150 },
-        size: { width: 900, height: 650 },
+      filebrowser: {
+        position: { x: 300, y: 200 },
+        size: { width: 800, height: 600 },
         isMinimized: false,
         isMaximized: false,
         zIndex: 9,
+      },
+      markdown: {
+        position: { x: 280, y: 180 },
+        size: { width: 950, height: 700 },
+        isMinimized: false,
+        isMaximized: false,
+        zIndex: 8,
       },
     }
   );
@@ -541,6 +549,25 @@ export default function ModernOSHomepage() {
   //   }
   // };
 
+  // Event listener for opening windows from other components
+  useEffect(() => {
+    const handleOpenWindow = (event: CustomEvent) => {
+      const { windowId } = event.detail;
+      if (windowId && !openWindows.includes(windowId)) {
+        toggleWindow(windowId);
+      }
+    };
+
+    window.addEventListener("openWindow", handleOpenWindow as EventListener);
+
+    return () => {
+      window.removeEventListener(
+        "openWindow",
+        handleOpenWindow as EventListener
+      );
+    };
+  }, [openWindows, toggleWindow]);
+
   return (
     <div
       className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden ${
@@ -836,6 +863,22 @@ export default function ModernOSHomepage() {
           onUpdateState={(updates) => updateWindowState("secret", updates)}
         >
           <SecretApp />
+        </ModernWindow>
+      )}
+
+      {openWindows.includes("filebrowser") && (
+        <ModernWindow
+          windowId="filebrowser"
+          title="📁 File Browser"
+          isActive={activeWindow === "filebrowser"}
+          windowState={windowStates.filebrowser}
+          onClose={() => closeWindow("filebrowser")}
+          onMinimize={() => minimizeWindow("filebrowser")}
+          onMaximize={() => maximizeWindow("filebrowser")}
+          onFocus={() => bringToFront("filebrowser")}
+          onUpdateState={(updates) => updateWindowState("filebrowser", updates)}
+        >
+          <FileBrowserApp />
         </ModernWindow>
       )}
 

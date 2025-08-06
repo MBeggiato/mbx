@@ -17,7 +17,8 @@ import {
   Calculator,
   Chrome,
   Monitor,
-  FileText,
+  HardDrive,
+  Edit,
 } from "lucide-react";
 
 interface StartMenuProps {
@@ -39,8 +40,14 @@ const systemApps = [
   {
     id: "markdown",
     name: "Markdown Editor",
-    icon: FileText,
+    icon: Edit,
     category: "Tools",
+  },
+  {
+    id: "filebrowser",
+    name: "File Browser",
+    icon: HardDrive,
+    category: "Files",
   },
   { id: "musicpro", name: "Music Player Pro", icon: Music, category: "Media" },
   { id: "photos", name: "Photo Viewer", icon: Image, category: "Media" },

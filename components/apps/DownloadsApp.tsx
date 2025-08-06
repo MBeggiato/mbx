@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Download,
   File,
@@ -10,10 +10,19 @@ import {
   Trash2,
   Eye,
   EyeOff,
+  FileText,
+  Plus,
+  RefreshCw,
 } from "lucide-react";
+import {
+  VirtualFile,
+  loadFiles,
+  deleteFile,
+  formatFileSize,
+} from "@/lib/virtualFileSystem";
 
 interface DownloadItem {
-  id: number;
+  id: number | string;
   name: string;
   size: string;
   type: string;
@@ -21,6 +30,8 @@ interface DownloadItem {
   icon: string;
   status: string;
   isSecret?: boolean;
+  isVirtual?: boolean;
+  virtualFile?: VirtualFile;
 }
 
 const downloads: DownloadItem[] = [
@@ -95,6 +106,72 @@ export default function DownloadsApp() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
   const [sortBy, setSortBy] = useState<"name" | "date" | "size">("date");
   const [showHidden, setShowHidden] = useState(false);
+  const [virtualFiles, setVirtualFiles] = useState<VirtualFile[]>([]);
+  const [showVirtualFiles, setShowVirtualFiles] = useState(true);
+
+  // Load virtual files on mount and listen for changes
+  useEffect(() => {
+    const loadVirtualFiles = () => {
+      const files = loadFiles();
+      setVirtualFiles(files);
+    };
+
+    loadVirtualFiles();
+
+    // Listen for file system changes from other apps
+    const handleFileSystemChange = () => {
+      loadVirtualFiles();
+    };
+
+    window.addEventListener("virtualFileSystemChange", handleFileSystemChange);
+
+    return () => {
+      window.removeEventListener(
+        "virtualFileSystemChange",
+        handleFileSystemChange
+      );
+    };
+  }, []);
+
+  // Convert VirtualFile to DownloadItem format for display
+  const virtualFilesToDownloadItems = (
+    files: VirtualFile[]
+  ): DownloadItem[] => {
+    return files.map((file) => ({
+      id: file.id,
+      name: file.name,
+      size: formatFileSize(file.size),
+      type:
+        file.type === "markdown"
+          ? "Markdown Document"
+          : file.type === "text"
+          ? "Text Document"
+          : file.type === "json"
+          ? "JSON File"
+          : "Document",
+      date: new Date(file.updatedAt)
+        .toLocaleString()
+        .replace(/T/, " ")
+        .replace(/\..+/, ""),
+      icon:
+        file.type === "markdown"
+          ? "📝"
+          : file.type === "text"
+          ? "📄"
+          : file.type === "json"
+          ? "🔧"
+          : "📋",
+      status: "mbx-file",
+      isVirtual: true,
+      virtualFile: file,
+    }));
+  };
+
+  // Combine regular downloads with virtual files
+  const allFiles = [
+    ...downloads,
+    ...(showVirtualFiles ? virtualFilesToDownloadItems(virtualFiles) : []),
+  ];
 
   // Easter egg handler for the secret file
   const handleSecretFileRightClick = (e: React.MouseEvent) => {
@@ -122,7 +199,7 @@ export default function DownloadsApp() {
     }
   };
 
-  const filteredDownloads = downloads
+  const filteredDownloads = allFiles
     .filter((item) => showHidden || !item.isSecret) // Filter out secret files unless showHidden is true
     .filter(
       (item) =>
@@ -142,23 +219,45 @@ export default function DownloadsApp() {
     });
 
   const getTotalSize = () => {
-    const total = downloads.reduce((acc, item) => {
+    const regularTotal = downloads.reduce((acc, item) => {
       const size = parseFloat(item.size);
       const unit = item.size.split(" ")[1];
       const multiplier = unit === "GB" ? 1024 : unit === "KB" ? 0.001 : 1;
       return acc + size * multiplier;
     }, 0);
+
+    const virtualTotal = virtualFiles.reduce((acc, file) => {
+      return acc + file.size / (1024 * 1024); // Convert bytes to MB
+    }, 0);
+
+    const total = regularTotal + virtualTotal;
     return total > 1024
       ? `${(total / 1024).toFixed(1)} GB`
       : `${total.toFixed(1)} MB`;
   };
 
-  const openFile = (fileName: string) => {
-    alert(`Opening ${fileName}...`);
+  const openFile = (fileName: string, item?: DownloadItem) => {
+    if (item?.isVirtual && item.virtualFile) {
+      // Open virtual file in markdown editor
+      window.dispatchEvent(
+        new CustomEvent("openMarkdownFile", {
+          detail: { file: item.virtualFile },
+        })
+      );
+    } else {
+      alert(`Opening ${fileName}...`);
+    }
   };
 
-  const deleteFile = (id: number) => {
-    alert(`Deleting file with ID ${id}...`);
+  const handleDeleteFile = (id: number | string, item: DownloadItem) => {
+    if (item.isVirtual && typeof id === "string") {
+      // Delete virtual file
+      deleteFile(id);
+      // Refresh will happen automatically via the event listener
+    } else {
+      // Handle regular download deletion
+      alert(`Deleting file with ID ${id}...`);
+    }
   };
 
   return (
@@ -216,6 +315,20 @@ export default function DownloadsApp() {
             <span>{showHidden ? "Hide" : "Show"} Hidden</span>
           </button>
 
+          {/* Show Virtual Files Toggle */}
+          <button
+            onClick={() => setShowVirtualFiles(!showVirtualFiles)}
+            className={`px-3 py-2 rounded-lg border transition-colors text-sm flex items-center space-x-2 ${
+              showVirtualFiles
+                ? "bg-blue-100 border-blue-300 text-blue-700"
+                : "bg-white border-gray-200 text-gray-600 hover:text-gray-900"
+            }`}
+            title={showVirtualFiles ? "Hide Mbx OS files" : "Show Mbx OS files"}
+          >
+            <FileText className="w-4 h-4" />
+            <span>Mbx Files ({virtualFiles.length})</span>
+          </button>
+
           {/* View Mode Toggle */}
           <div className="bg-white rounded-lg border border-gray-200 p-1 flex">
             <button
@@ -244,11 +357,17 @@ export default function DownloadsApp() {
 
       {/* Stats */}
       <div className="bg-white rounded-lg p-4 mb-6 border border-gray-200">
-        <div className="flex items-center justify-between">
+        <div className="grid grid-cols-4 gap-4">
           <div>
-            <p className="text-sm text-gray-600">Total Downloads</p>
+            <p className="text-sm text-gray-600">Downloads</p>
             <p className="text-2xl font-semibold text-gray-900">
               {downloads.length}
+            </p>
+          </div>
+          <div>
+            <p className="text-sm text-gray-600">Mbx Files</p>
+            <p className="text-2xl font-semibold text-blue-600">
+              {virtualFiles.length}
             </p>
           </div>
           <div>
@@ -301,14 +420,14 @@ export default function DownloadsApp() {
                   </div>
                   <div className="flex items-center space-x-2">
                     <button
-                      onClick={() => openFile(item.name)}
+                      onClick={() => openFile(item.name, item)}
                       className="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded transition-colors"
                       title="Open"
                     >
                       <Eye className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={() => deleteFile(item.id)}
+                      onClick={() => handleDeleteFile(item.id, item)}
                       className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
                       title="Delete"
                     >
@@ -346,13 +465,13 @@ export default function DownloadsApp() {
                 <p className="text-sm text-gray-500 mb-3">{item.size}</p>
                 <div className="flex items-center justify-center space-x-2">
                   <button
-                    onClick={() => openFile(item.name)}
+                    onClick={() => openFile(item.name, item)}
                     className="p-1 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded transition-colors"
                   >
                     <Eye className="w-4 h-4" />
                   </button>
                   <button
-                    onClick={() => deleteFile(item.id)}
+                    onClick={() => handleDeleteFile(item.id, item)}
                     className="p-1 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
                   >
                     <Trash2 className="w-4 h-4" />

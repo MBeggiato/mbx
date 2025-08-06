@@ -11,6 +11,9 @@ import {
   Gamepad2,
   Chrome,
   Download,
+  HardDrive,
+  FileText,
+  Edit,
 } from "lucide-react";
 import { WindowState } from "./ModernWindow";
 
@@ -117,6 +120,12 @@ export default function Taskbar({
                 )}
                 {windowId === "downloads" && (
                   <Download className="w-6 h-6 text-white" />
+                )}
+                {windowId === "filebrowser" && (
+                  <HardDrive className="w-6 h-6 text-white" />
+                )}
+                {windowId === "markdown" && (
+                  <Edit className="w-6 h-6 text-white" />
                 )}
                 {!isMinimized && activeWindow === windowId && (
                   <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full"></div>
