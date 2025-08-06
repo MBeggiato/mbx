@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Mbx Homepage CLI Wrapper
+# This script provides a convenient way to run the Node.js CLI tool
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CLI_SCRIPT="$SCRIPT_DIR/mbx-cli.js"
+
+# Check if Node.js CLI exists
+if [[ ! -f "$CLI_SCRIPT" ]]; then
+    echo "❌ Error: mbx-cli.js not found in $SCRIPT_DIR"
+    exit 1
+fi
+
+# Check if Node.js is available
+if ! command -v node &> /dev/null; then
+    echo "❌ Error: Node.js is not installed or not in PATH"
+    echo "Please install Node.js to use this CLI tool"
+    exit 1
+fi
+
+# Run the Node.js CLI with all arguments
+exec node "$CLI_SCRIPT" "$@"

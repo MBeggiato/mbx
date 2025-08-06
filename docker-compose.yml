@@ -1,0 +1,39 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: mbx-homepage-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-guestbook}
+      POSTGRES_USER: ${POSTGRES_USER:-mbx}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mbx123}
+    ports:
+      - "${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - mbx-network
+    env_file:
+      - .env
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: mbx-homepage-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@mbx.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin123}
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    depends_on:
+      - postgres
+    networks:
+      - mbx-network
+    env_file:
+      - .env
+
+volumes:
+  postgres_data:
+
+networks:
+  mbx-network:
+    driver: bridge
