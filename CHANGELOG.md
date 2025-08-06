@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Multiple file tabs support in Markdown Editor
 - File tree sidebar with search functionality
 - Context menu functionality in File Browser
-
+- ✨ implement automated changelog system
 ### Changed
 
 - Enhanced Markdown Editor with better multi-file management

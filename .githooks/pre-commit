@@ -1,0 +1,54 @@
+#!/bin/sh
+
+# Pre-commit hook for Mbx OS
+# Automatically updates CHANGELOG.md based on conventional commit messages
+
+echo "🔄 Running pre-commit hook..."
+
+# Check if we're in a git repository
+if ! git rev-parse --git-dir > /dev/null 2>&1; then
+  echo "❌ Not in a git repository"
+  exit 0
+fi
+
+# Check if there are any commits (avoid error on initial commit)
+if ! git rev-parse --verify HEAD > /dev/null 2>&1; then
+  echo "💡 Initial commit detected, skipping changelog update"
+  exit 0
+fi
+
+# Get the commit message from the commit-msg file (if it exists)
+COMMIT_MSG_FILE=".git/COMMIT_EDITMSG"
+
+if [ -f "$COMMIT_MSG_FILE" ]; then
+  COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+else
+  # Fallback to getting the last commit message
+  COMMIT_MSG=$(git log -1 --pretty=%B 2>/dev/null || echo "")
+fi
+
+# Skip if no commit message
+if [ -z "$COMMIT_MSG" ]; then
+  echo "💡 No commit message found, skipping changelog update"
+  exit 0
+fi
+
+# Run the changelog updater
+echo "📝 Updating changelog for commit: $(echo "$COMMIT_MSG" | head -n 1)"
+
+# Use Node.js to run the changelog script
+if command -v node > /dev/null 2>&1; then
+  node scripts/update-changelog.js "$COMMIT_MSG"
+  
+  # Check if changelog was updated and stage it
+  if git diff --cached --quiet CHANGELOG.md; then
+    echo "💡 No changelog changes needed"
+  else
+    echo "✅ CHANGELOG.md updated and staged"
+  fi
+else
+  echo "❌ Node.js not found, skipping changelog update"
+fi
+
+echo "✅ Pre-commit hook completed"
+exit 0

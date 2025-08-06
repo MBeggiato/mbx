@@ -6,7 +6,11 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "changelog:update": "node scripts/update-changelog.js",
+    "commit:helper": "./scripts/commit-helper.sh",
+    "commit": "./scripts/commit-helper.sh",
+    "setup:hooks": "git config core.hooksPath .githooks"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
