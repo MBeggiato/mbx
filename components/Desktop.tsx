@@ -69,7 +69,9 @@ export default function Desktop({
 
       <div
         className="flex flex-col items-center cursor-pointer group"
-        onClick={() => window.open("https://github.com/MBeggiato", "_blank")}
+        onClick={() =>
+          window.open("https://github.com/MBeggiato/mbx", "_blank")
+        }
       >
         <div className="w-16 h-16 bg-gradient-to-br from-gray-500 to-gray-600 rounded-2xl shadow-lg flex items-center justify-center mb-3 group-hover:scale-105 transition-transform duration-200 relative">
           <Github className="w-8 h-8 text-white" />
