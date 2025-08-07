@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - 📦 **settings**: Added settings app
+- 🔧 **scripts**: enhance commit helper with CLI support
 
 ## [0.2.0] - 2025-08-07
 
