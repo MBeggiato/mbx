@@ -678,9 +678,11 @@ export default function ModernOSHomepage() {
         />
 
         {/* Debug Theme Display */}
-        <div className="fixed top-4 left-4 z-[9999] bg-background border border-border text-foreground px-3 py-2 rounded-md text-sm font-medium shadow-lg">
-          Current Theme: {theme || 'loading...'}
-        </div>
+        {mounted && (
+          <div className="fixed top-4 left-4 z-[9999] bg-background border border-border text-foreground px-3 py-2 rounded-md text-sm font-medium shadow-lg">
+            Current Theme: {theme || "loading..."}
+          </div>
+        )}
 
         {/* Share Button */}
         {openWindows.length > 0 && (

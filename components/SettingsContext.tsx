@@ -118,8 +118,14 @@ export function SettingsProvider({
 
   // Load settings from localStorage on mount
   useEffect(() => {
+    // Only run on client side
+    if (typeof window === "undefined") return;
+    
     const savedSettings = localStorage.getItem("mbx-settings");
-    console.log("SettingsContext: Loading settings from localStorage:", savedSettings);
+    console.log(
+      "SettingsContext: Loading settings from localStorage:",
+      savedSettings
+    );
     if (savedSettings) {
       try {
         const parsed = JSON.parse(savedSettings);
@@ -130,7 +136,10 @@ export function SettingsProvider({
 
         // Apply theme immediately after loading settings
         if (mergedSettings.theme && onThemeChange) {
-          console.log("SettingsContext: Applying loaded theme:", mergedSettings.theme);
+          console.log(
+            "SettingsContext: Applying loaded theme:",
+            mergedSettings.theme
+          );
           onThemeChange(mergedSettings.theme);
         }
       } catch (error) {
@@ -140,7 +149,10 @@ export function SettingsProvider({
       console.log("SettingsContext: No saved settings found, using defaults");
       // Apply default theme
       if (defaultSettings.theme && onThemeChange) {
-        console.log("SettingsContext: Applying default theme:", defaultSettings.theme);
+        console.log(
+          "SettingsContext: Applying default theme:",
+          defaultSettings.theme
+        );
         onThemeChange(defaultSettings.theme);
       }
     }
@@ -183,11 +195,18 @@ export function SettingsProvider({
       case "theme":
         console.log("SettingsContext: Calling onThemeChange with:", value);
         onThemeChange?.(value as "light" | "dark" | "system");
-        // Auto-save theme changes immediately
-        setTimeout(() => {
-          localStorage.setItem("mbx-settings", JSON.stringify({ ...settings, [key]: value }));
-          console.log("SettingsContext: Auto-saved theme change to localStorage");
-        }, 0);
+        // Auto-save theme changes immediately (client-side only)
+        if (typeof window !== "undefined") {
+          setTimeout(() => {
+            localStorage.setItem(
+              "mbx-settings",
+              JSON.stringify({ ...settings, [key]: value })
+            );
+            console.log(
+              "SettingsContext: Auto-saved theme change to localStorage"
+            );
+          }, 0);
+        }
         break;
       case "startupApps":
         onStartupAppsChange?.(value as string[]);
@@ -224,7 +243,9 @@ export function SettingsProvider({
 
   const saveSettings = async () => {
     try {
-      localStorage.setItem("mbx-settings", JSON.stringify(settings));
+      if (typeof window !== "undefined") {
+        localStorage.setItem("mbx-settings", JSON.stringify(settings));
+      }
     } catch (error) {
       console.error("Failed to save settings:", error);
       throw error;
@@ -233,7 +254,9 @@ export function SettingsProvider({
 
   const resetSettings = () => {
     setSettings(defaultSettings);
-    localStorage.removeItem("mbx-settings");
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("mbx-settings");
+    }
   };
 
   const exportSettings = () => {
