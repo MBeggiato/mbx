@@ -169,6 +169,7 @@ export function SettingsProvider({
     // Apply changes immediately to the parent component
     switch (key) {
       case "theme":
+        console.log("SettingsContext: Theme setting updated to:", value);
         onThemeChange?.(value as "light" | "dark" | "system");
         break;
       case "startupApps":

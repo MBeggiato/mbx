@@ -31,7 +31,6 @@ html {
           attribute="class"
           defaultTheme="system"
           enableSystem
-          disableTransitionOnChange
         >
           {children}
         </ThemeProvider>
