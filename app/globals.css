@@ -73,7 +73,6 @@ html.dark {
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
   --desktop-bg: linear-gradient(to bottom right, rgb(2 6 23), rgb(30 8 68), rgb(2 6 23));
-  --test-color: #00ff00; /* Green for dark mode */
 }
 
 @theme inline {
@@ -131,7 +130,6 @@ html.dark {
   --window-transparency: 95%;
   --accent-color: #3b82f6;
   --desktop-bg: linear-gradient(to bottom right, rgb(15 23 42), rgb(88 28 135), rgb(15 23 42));
-  --test-color: #ff0000; /* Red for light mode */
 }
 
 html.dark {
