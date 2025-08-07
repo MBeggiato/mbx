@@ -103,6 +103,7 @@ interface SettingsProviderProps {
   onAnimationsChange?: (enabled: boolean) => void;
   onVolumeChange?: (volume: number) => void;
   onNotificationSettingsChange?: (settings: any) => void;
+  onThemeChange?: (theme: "light" | "dark" | "system") => void;
 }
 
 export function SettingsProvider({
@@ -111,6 +112,7 @@ export function SettingsProvider({
   onAnimationsChange,
   onVolumeChange,
   onNotificationSettingsChange,
+  onThemeChange,
 }: SettingsProviderProps) {
   const [settings, setSettings] = useState<AppSettings>(defaultSettings);
 
@@ -160,6 +162,9 @@ export function SettingsProvider({
 
     // Apply changes immediately to the parent component
     switch (key) {
+      case "theme":
+        onThemeChange?.(value as "light" | "dark" | "system");
+        break;
       case "startupApps":
         onStartupAppsChange?.(value as string[]);
         break;

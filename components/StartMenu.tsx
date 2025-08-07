@@ -99,9 +99,9 @@ export default function StartMenu({
 
       {/* Start Menu */}
       <div className="fixed bottom-28 left-1/2 transform -translate-x-1/2 z-50">
-        <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 w-96 max-h-[600px] overflow-hidden">
+        <div className="start-menu bg-background/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-border/50 w-96 max-h-[600px] overflow-hidden">
           {/* Header */}
-          <div className="p-6 border-b border-gray-200/50">
+          <div className="p-6 border-b border-border/50">
             <div className="flex items-center space-x-3 mb-4">
               <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                 <img

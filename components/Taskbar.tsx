@@ -40,7 +40,7 @@ export default function Taskbar({
 }: TaskbarProps) {
   return (
     <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2">
-      <div className="bg-white/10 backdrop-blur-xl rounded-2xl px-4 py-3 shadow-2xl border border-white/20">
+      <div className="taskbar bg-background/90 backdrop-blur-xl rounded-2xl px-4 py-3 shadow-2xl border border-border/50">
         <div className="flex items-center space-x-4">
           {/* Start Button */}
           <div

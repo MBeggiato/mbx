@@ -43,7 +43,6 @@ import {
   Sun,
   Laptop,
 } from "lucide-react";
-import { useTheme } from "next-themes";
 import { useSettings, AppSettings } from "@/components/SettingsContext";
 
 interface SettingsAppProps {
@@ -65,7 +64,6 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
   const [saveStatus, setSaveStatus] = useState<
     "idle" | "saving" | "saved" | "error"
   >("idle");
-  const { theme, setTheme } = useTheme();
 
   // Update settings and mark as changed
   const updateSetting = <K extends keyof AppSettings>(
@@ -82,11 +80,6 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
     setSaveStatus("saving");
     try {
       await saveGlobalSettings();
-
-      // Apply theme change immediately
-      if (settings.theme !== theme) {
-        setTheme(settings.theme);
-      }
 
       // Simulate API call delay
       await new Promise((resolve) => setTimeout(resolve, 500));

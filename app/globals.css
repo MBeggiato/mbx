@@ -137,4 +137,48 @@
   --app-font-size: 14px;
   --window-transparency: 95%;
   --accent-color: #3b82f6;
+  --desktop-bg: linear-gradient(to bottom right, rgb(15 23 42), rgb(88 28 135), rgb(15 23 42));
+}
+
+.dark {
+  --desktop-bg: linear-gradient(to bottom right, rgb(2 6 23), rgb(30 8 68), rgb(2 6 23));
+}
+
+/* Desktop background dark mode support */
+.desktop-background {
+  background: var(--desktop-bg);
+}
+
+/* Taskbar dark mode support */
+.taskbar {
+  background: var(--background);
+  border-top: 1px solid var(--border);
+}
+
+/* Start menu dark mode support */
+.start-menu {
+  background: var(--background);
+  border: 1px solid var(--border);
+}
+
+/* Window dark mode support */
+.window {
+  background: var(--background);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+}
+
+.window-titlebar {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  color: var(--card-foreground);
+}
+
+/* Easter egg modes compatibility with dark mode */
+.dark .neon-mode {
+  filter: brightness(0.8);
+}
+
+.dark .matrix-mode {
+  filter: hue-rotate(180deg) brightness(0.7);
 }

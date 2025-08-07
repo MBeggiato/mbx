@@ -144,7 +144,7 @@ export default function ModernWindow({
 
   return (
     <div
-      className={`absolute bg-white rounded-2xl shadow-2xl border border-gray-200 transition-all duration-300 ease-out ${
+      className={`window absolute bg-background rounded-2xl shadow-2xl border border-border transition-all duration-300 ease-out ${
         isDragging || isResizing ? "select-none" : ""
       } ${windowState.isMaximized ? "!rounded-none" : ""}`}
       style={{
@@ -165,13 +165,13 @@ export default function ModernWindow({
     >
       {/* Window Title Bar */}
       <div
-        className={`h-14 flex items-center justify-between px-6 cursor-move window-title bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200 ${
+        className={`window-titlebar h-14 flex items-center justify-between px-6 cursor-move window-title bg-card border-b border-border ${
           windowState.isMaximized ? "!rounded-none" : "rounded-t-2xl"
         }`}
         onMouseDown={handleMouseDown}
         onDoubleClick={handleDoubleClick}
       >
-        <span className="text-lg font-semibold text-gray-900 pointer-events-none">
+        <span className="text-lg font-semibold text-card-foreground pointer-events-none">
           {title}
         </span>
         <div className="flex space-x-3">
@@ -207,7 +207,7 @@ export default function ModernWindow({
 
       {/* Window Content */}
       <div
-        className={`bg-white overflow-hidden ${
+        className={`bg-background overflow-hidden ${
           windowState.isMaximized ? "!rounded-none" : "rounded-b-2xl"
         }`}
         style={{ height: "calc(100% - 56px)" }}

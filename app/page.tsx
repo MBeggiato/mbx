@@ -22,8 +22,10 @@ import FileBrowserApp from "@/components/apps/FileBrowserApp";
 import ChangelogApp from "@/components/apps/ChangelogApp";
 import SettingsApp from "@/components/apps/SettingsApp";
 import { SettingsProvider } from "@/components/SettingsContext";
+import { useTheme } from "next-themes";
 
 export default function ModernOSHomepage() {
+  const { setTheme } = useTheme();
   const [openWindows, setOpenWindows] = useState<string[]>([]);
   const [activeWindow, setActiveWindow] = useState<string | null>(null);
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
@@ -593,6 +595,10 @@ export default function ModernOSHomepage() {
     // This would integrate with a notification system
   };
 
+  const handleThemeChange = (theme: "light" | "dark" | "system") => {
+    setTheme(theme);
+  };
+
   // Easter Egg: Right-click context menu (now moved to Downloads app)
   // const handleRightClick = (e: React.MouseEvent) => {
   //   e.preventDefault();
@@ -642,9 +648,10 @@ export default function ModernOSHomepage() {
       onAnimationsChange={handleAnimationsChange}
       onVolumeChange={handleVolumeChange}
       onNotificationSettingsChange={handleNotificationSettingsChange}
+      onThemeChange={handleThemeChange}
     >
       <div
-        className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden ${
+        className={`min-h-screen desktop-background relative overflow-hidden ${
           isNeonMode ? "neon-mode" : ""
         }`}
       >
