@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - ✨ **changelog**: Added automatic changelog system
 - ✨ update changelog for version 0.2.0 and enhance release management documentation
-
+- ✨ **settings**: Added functional settings
 ### Changed
 
 - 📦 **settings**: Added settings app
