@@ -44,6 +44,7 @@ import {
   Laptop,
 } from "lucide-react";
 import { useSettings, AppSettings } from "@/components/SettingsContext";
+import { useTheme } from "next-themes";
 
 interface SettingsAppProps {
   onClose?: () => void;
@@ -58,6 +59,8 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
     exportSettings: exportGlobalSettings,
     importSettings: importGlobalSettings,
   } = useSettings();
+
+  const { theme, setTheme } = useTheme();
 
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [activeTab, setActiveTab] = useState("appearance");
@@ -232,10 +235,12 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
                 <div className="space-y-2">
                   <Label>Theme</Label>
                   <Select
-                    value={settings.theme}
-                    onValueChange={(value: "light" | "dark" | "system") =>
-                      updateSetting("theme", value)
-                    }
+                    value={theme || "system"}
+                    onValueChange={(value: "light" | "dark" | "system") => {
+                      setTheme(value);
+                      // Also update SettingsContext for UI consistency
+                      updateSetting("theme", value);
+                    }}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -777,7 +782,7 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
         <div className="flex items-center justify-between text-sm text-muted-foreground">
           <div>Mbx OS Settings v0.2.0</div>
           <div className="flex items-center gap-4">
-            <span>Current Theme: {settings.theme}</span>
+            <span>Current Theme: {theme || "system"}</span>
             <span>
               Last Saved: {saveStatus === "saved" ? "Just now" : "Not saved"}
             </span>

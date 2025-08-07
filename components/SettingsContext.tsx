@@ -120,7 +120,7 @@ export function SettingsProvider({
   useEffect(() => {
     // Only run on client side
     if (typeof window === "undefined") return;
-    
+
     const savedSettings = localStorage.getItem("mbx-settings");
     console.log(
       "SettingsContext: Loading settings from localStorage:",
@@ -134,29 +134,16 @@ export function SettingsProvider({
         console.log("SettingsContext: Merged settings:", mergedSettings);
         setSettings(mergedSettings);
 
-        // Apply theme immediately after loading settings
-        if (mergedSettings.theme && onThemeChange) {
-          console.log(
-            "SettingsContext: Applying loaded theme:",
-            mergedSettings.theme
-          );
-          onThemeChange(mergedSettings.theme);
-        }
+        // Don't apply theme here - let next-themes handle its own persistence
+        // The theme will be synced through the onThemeChange callback when next-themes initializes
       } catch (error) {
         console.error("Failed to parse saved settings:", error);
       }
     } else {
       console.log("SettingsContext: No saved settings found, using defaults");
-      // Apply default theme
-      if (defaultSettings.theme && onThemeChange) {
-        console.log(
-          "SettingsContext: Applying default theme:",
-          defaultSettings.theme
-        );
-        onThemeChange(defaultSettings.theme);
-      }
+      // Don't apply default theme here - let next-themes handle its own initialization
     }
-  }, [onThemeChange]);
+  }, []);
 
   // Apply CSS custom properties for dynamic styling
   useEffect(() => {
@@ -188,22 +175,28 @@ export function SettingsProvider({
     value: AppSettings[K]
   ) => {
     console.log(`SettingsContext: Updating ${key} to:`, value);
-    setSettings((prev) => ({ ...prev, [key]: value }));
+
+    // Calculate the new settings object
+    const newSettings = { ...settings, [key]: value };
+    setSettings(newSettings);
 
     // Apply changes immediately to the parent component
     switch (key) {
       case "theme":
         console.log("SettingsContext: Calling onThemeChange with:", value);
         onThemeChange?.(value as "light" | "dark" | "system");
-        // Auto-save theme changes immediately (client-side only)
+        // Don't save theme to localStorage - next-themes handles that
+        // Only save non-theme settings
         if (typeof window !== "undefined") {
           setTimeout(() => {
+            const { theme, ...otherSettings } = newSettings;
+            const settingsToSave = { ...otherSettings, theme: value }; // Include theme for UI state
             localStorage.setItem(
               "mbx-settings",
-              JSON.stringify({ ...settings, [key]: value })
+              JSON.stringify(settingsToSave)
             );
             console.log(
-              "SettingsContext: Auto-saved theme change to localStorage"
+              "SettingsContext: Saved non-theme settings (theme delegated to next-themes)"
             );
           }, 0);
         }

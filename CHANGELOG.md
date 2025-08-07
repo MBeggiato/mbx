@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - 🐛 **css**: fix dark mode CSS specificity with html.dark selector
+- 🐛 **hydration**: fix SSR hydration mismatch for theme system
 
 ## [0.2.0] - 2025-08-07
 

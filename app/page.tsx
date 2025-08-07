@@ -21,7 +21,7 @@ import MarkdownEditorApp from "@/components/apps/MarkdownEditorApp";
 import FileBrowserApp from "@/components/apps/FileBrowserApp";
 import ChangelogApp from "@/components/apps/ChangelogApp";
 import SettingsApp from "@/components/apps/SettingsApp";
-import { SettingsProvider } from "@/components/SettingsContext";
+import { SettingsProvider, useSettings } from "@/components/SettingsContext";
 import { useTheme } from "next-themes";
 
 export default function ModernOSHomepage() {
