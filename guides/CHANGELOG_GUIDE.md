@@ -129,7 +129,7 @@ To indicate breaking changes, use:
 1. **Configure Git hooks**:
 
 ```bash
-npm run setup:hooks
+bun run setup:hooks
 ```
 
 2. **Verify setup**:
@@ -147,7 +147,7 @@ git config core.hooksPath
 git add .
 
 # 3. Use the interactive helper
-npm run commit
+bun run commit
 # or
 ./scripts/commit-helper.sh
 ```
@@ -176,7 +176,7 @@ git commit -m "feat: add new dashboard widget"
 
 ```bash
 # Update changelog without committing
-npm run changelog:update
+bun run changelog:update
 
 # Or with specific commit message
 node scripts/update-changelog.js "feat: add new feature"
@@ -213,7 +213,7 @@ git status
 
 ```bash
 # Option A: Use helper (recommended)
-npm run commit
+bun run commit
 
 # Option B: Manual conventional commit
 git commit -m "feat(apps): add new productivity app"
@@ -242,16 +242,16 @@ The release system automatically moves unreleased changes to versioned sections 
 
 ```bash
 # Patch release (bug fixes) - 1.0.0 → 1.0.1
-npm run release:patch
+bun run release:patch
 
 # Minor release (new features) - 1.0.0 → 1.1.0
-npm run release:minor
+bun run release:minor
 
 # Major release (breaking changes) - 1.0.0 → 2.0.0
-npm run release:major
+bun run release:major
 
 # Custom release with specific version
-npm run release minor "1.5.0" "Special milestone release"
+bun run release minor "1.5.0" "Special milestone release"
 ```
 
 #### **📋 Release Process**

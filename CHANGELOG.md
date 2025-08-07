@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - ✨ **changelog**: Added automatic changelog system
-
+- ✨ update changelog for version 0.2.0 and enhance release management documentation
 
 ## [0.2.0] - 2025-08-07
 

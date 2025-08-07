@@ -777,8 +777,8 @@ console.log("State changed:", state);
 4. **Build Errors**:
 
 ```bash
-npm run build  # Check for TypeScript errors
-npm run lint   # Check for linting issues
+bun run build  # Check for TypeScript errors
+bun run lint   # Check for linting issues
 ```
 
 ### Performance Optimization

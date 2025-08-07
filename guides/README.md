@@ -37,17 +37,17 @@ Welcome to the Mbx OS development documentation! This folder contains comprehens
 
 ```bash
 # Set up automated changelog
-npm run setup:hooks
+bun run setup:hooks
 
 # Create commits with helper
-npm run commit
+bun run commit
 
 # Update changelog manually
-npm run changelog:update
+bun run changelog:update
 
 # Build and test
-npm run build
-npm run dev
+bun run build
+bun run dev
 ```
 
 ## 🛠️ Development Workflow
@@ -58,10 +58,10 @@ npm run dev
 # Clone and install
 git clone <repository-url>
 cd mbx-os
-npm install
+bun install
 
 # Configure git hooks
-npm run setup:hooks
+bun run setup:hooks
 ```
 
 ### 2. **Create New App**
@@ -77,7 +77,7 @@ npm run setup:hooks
 git add .
 
 # Use interactive commit helper (recommended)
-npm run commit
+bun run commit
 
 # Or create conventional commit manually
 git commit -m "feat(apps): add new productivity app"
@@ -87,7 +87,7 @@ git commit -m "feat(apps): add new productivity app"
 
 - Update relevant documentation
 - Test your changes thoroughly
-- Ensure all builds pass: `npm run build`
+- Ensure all builds pass: `bun run build`
 
 ## 📋 Project Structure
 
@@ -152,7 +152,7 @@ mbx-os/
 
 ### **Before Submitting**
 
-1. Ensure all builds pass (`npm run build`)
+1. Ensure all builds pass (`bun run build`)
 2. Verify your changelog entries are correct
 3. Test responsive behavior
 4. Follow the code review checklist
@@ -176,7 +176,7 @@ mbx-os/
 
 1. **Start Small**: Begin with simple apps to understand the system
 2. **Follow Examples**: Use the provided examples as templates
-3. **Test Frequently**: Run `npm run dev` to test your changes
+3. **Test Frequently**: Run `bun run dev` to test your changes
 4. **Ask Questions**: Review existing code for patterns and solutions
 
 ## 🚀 What's Next?
