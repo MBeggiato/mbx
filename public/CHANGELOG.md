@@ -7,18 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2025-08-07
+
+### Feature Enhancement
+
+This minor release includes 11 changes with 5 new features, 2 bug fixes, 4 improvements. Enjoy the new features and enhanced functionality!
+
 ### Added
 
 - Changelog app to view project updates
 - Multiple file tabs support in Markdown Editor
 - File tree sidebar with search functionality
 - Context menu functionality in File Browser
-
+- ✨ implement automated changelog system
 ### Changed
 
 - Enhanced Markdown Editor with better multi-file management
 - Improved file navigation and organization
-
+- 📚 add test file for automation demo
+- 🔧 remove test file
 ### Fixed
 
 - Context menu appearing and functioning correctly

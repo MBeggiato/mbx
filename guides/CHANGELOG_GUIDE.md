@@ -10,10 +10,11 @@ A comprehensive guide for creating conventional commits and maintaining the proj
 4. [Commit Types](#commit-types)
 5. [Quick Start](#quick-start)
 6. [Manual Workflow](#manual-workflow)
-7. [Configuration](#configuration)
-8. [Best Practices](#best-practices)
-9. [Examples](#examples)
-10. [Troubleshooting](#troubleshooting)
+7. [Release Management](#release-management)
+8. [Configuration](#configuration)
+9. [Best Practices](#best-practices)
+10. [Examples](#examples)
+11. [Troubleshooting](#troubleshooting)
 
 ## Overview
 
@@ -231,7 +232,120 @@ git diff HEAD~1 CHANGELOG.md
 git push origin main
 ```
 
-## Configuration
+## Release Management
+
+### 🎯 **Creating New Releases**
+
+The release system automatically moves unreleased changes to versioned sections and manages semantic versioning.
+
+#### **🚀 Quick Release Commands**
+
+```bash
+# Patch release (bug fixes) - 1.0.0 → 1.0.1
+npm run release:patch
+
+# Minor release (new features) - 1.0.0 → 1.1.0
+npm run release:minor
+
+# Major release (breaking changes) - 1.0.0 → 2.0.0
+npm run release:major
+
+# Custom release with specific version
+npm run release minor "1.5.0" "Special milestone release"
+```
+
+#### **📋 Release Process**
+
+1. **Accumulate Changes**: Work normally, creating commits with conventional messages
+2. **Review Unreleased**: Check the `[Unreleased]` section in CHANGELOG.md
+3. **Create Release**: Run the appropriate release command
+4. **Review & Commit**: Review generated changelog and commit the release
+5. **Tag & Push**: Create git tags and push to remote
+
+#### **🔄 Step-by-Step Release Workflow**
+
+```bash
+# 1. Check current unreleased changes
+cat CHANGELOG.md | grep -A 20 "## \[Unreleased\]"
+
+# 2. Create a new release (example: minor release)
+npm run release:minor
+
+# 3. Review the generated changelog
+git diff --cached CHANGELOG.md
+
+# 4. Commit the release
+git commit -m "chore: release v1.3.0"
+
+# 5. Create and push tags
+git tag v1.3.0
+git push origin main --tags
+```
+
+### 🏷️ **Release Types & Versioning**
+
+| Release Type | Version Change  | When to Use                      | Example            |
+| ------------ | --------------- | -------------------------------- | ------------------ |
+| **Patch**    | `1.0.0 → 1.0.1` | Bug fixes, minor improvements    | Fix calculator bug |
+| **Minor**    | `1.0.0 → 1.1.0` | New features, enhancements       | Add new app        |
+| **Major**    | `1.0.0 → 2.0.0` | Breaking changes, major rewrites | API redesign       |
+
+### 📝 **What Happens During Release**
+
+1. **Version Calculation**: Automatically increments version based on type
+2. **Changelog Update**: Moves unreleased changes to new version section
+3. **Release Notes**: Generates summary based on changes
+4. **Package Update**: Updates `package.json` version
+5. **File Staging**: Stages all modified files for commit
+6. **Public Copy**: Updates `public/CHANGELOG.md` for the Changelog app
+
+### 🎨 **Release Notes Generation**
+
+The system automatically generates release notes based on your changes:
+
+```markdown
+## [1.3.0] - 2025-08-07
+
+### Feature-Rich Update
+
+This minor release includes 5 changes with 2 new features, 1 bug fix, 2 improvements.
+Enjoy the new features and enhanced functionality!
+
+### Added
+
+- ✨ Automated changelog generation system
+- ✨ **apps**: Changelog viewer with search functionality
+
+### Fixed
+
+- 🐛 **ui**: Context menu positioning issue
+
+### Changed
+
+- 📚 Updated developer documentation
+- 🔧 Improved build process
+```
+
+### ⚙️ **Custom Release Notes**
+
+You can provide custom release notes:
+
+```bash
+# With custom release notes
+npm run release minor "1.5.0" "🎉 Milestone Release
+
+This special release marks a major milestone in Mbx OS development with
+comprehensive changelog automation and enhanced developer experience."
+```
+
+### 🔍 **Pre-Release Checks**
+
+Before creating a release, the system checks:
+
+- ✅ **Unreleased changes exist**: Ensures there's content to release
+- ✅ **Valid version format**: Validates semantic versioning
+- ✅ **Git repository**: Confirms you're in a git repository
+- ✅ **File permissions**: Checks write access to required files
 
 ### ⚙️ **Changelog Configuration**
 

@@ -1,6 +1,6 @@
 {
   "name": "mbx-homepage",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "build": "next build",
@@ -10,7 +10,11 @@
     "changelog:update": "node scripts/update-changelog.js",
     "commit:helper": "./scripts/commit-helper.sh",
     "commit": "./scripts/commit-helper.sh",
-    "setup:hooks": "git config core.hooksPath .githooks"
+    "setup:hooks": "git config core.hooksPath .githooks",
+    "release": "node scripts/release.js",
+    "release:patch": "node scripts/release.js patch",
+    "release:minor": "node scripts/release.js minor",
+    "release:major": "node scripts/release.js major"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
