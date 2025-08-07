@@ -14,6 +14,8 @@ import {
   HardDrive,
   FileText,
   Edit,
+  Settings,
+  Eye,
 } from "lucide-react";
 import { WindowState } from "./ModernWindow";
 
@@ -46,7 +48,7 @@ export default function Taskbar({
           <div
             className={`w-12 h-12 rounded-xl flex items-center justify-center cursor-pointer hover:scale-105 transition-all duration-200 shadow-lg ${
               isStartMenuOpen
-                ? "bg-white/30"
+                ? "bg-primary/30"
                 : "bg-gradient-to-br from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700"
             } ${logoClickCount > 0 ? "animate-pulse" : ""}`}
             onClick={(e) => {
@@ -68,12 +70,12 @@ export default function Taskbar({
           </div>
 
           {/* Search */}
-          <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center cursor-pointer hover:scale-105 transition-transform duration-200">
-            <Search className="w-6 h-6 text-white" />
+          <div className="w-12 h-12 bg-muted/60 hover:bg-muted rounded-xl flex items-center justify-center cursor-pointer hover:scale-105 transition-transform duration-200">
+            <Search className="w-6 h-6 text-foreground" />
           </div>
 
           {/* Separator */}
-          <div className="w-px h-8 bg-white/30"></div>
+          <div className="w-px h-8 bg-border"></div>
 
           {/* Window Buttons */}
           {openWindows.map((windowId) => {
@@ -83,62 +85,71 @@ export default function Taskbar({
                 key={windowId}
                 className={`w-12 h-12 rounded-xl cursor-pointer hover:scale-105 transition-all duration-200 flex items-center justify-center relative ${
                   activeWindow === windowId && !isMinimized
-                    ? "bg-white/30 shadow-lg"
-                    : "bg-white/10 hover:bg-white/20"
+                    ? "bg-primary/30 shadow-lg"
+                    : "bg-muted/40 hover:bg-muted/60"
                 } ${isMinimized ? "opacity-60" : ""}`}
                 onClick={() => onToggleWindow(windowId)}
               >
                 {windowId === "about" && (
-                  <User className="w-6 h-6 text-white" />
+                  <User className="w-6 h-6 text-foreground" />
                 )}
                 {windowId === "projects" && (
-                  <Folder className="w-6 h-6 text-white" />
+                  <Folder className="w-6 h-6 text-foreground" />
                 )}
                 {windowId === "contact" && (
-                  <Mail className="w-6 h-6 text-white" />
+                  <Mail className="w-6 h-6 text-foreground" />
                 )}
                 {windowId === "guestbook" && (
-                  <BookOpen className="w-6 h-6 text-white" />
+                  <BookOpen className="w-6 h-6 text-foreground" />
                 )}
                 {windowId === "calculator" && (
-                  <Calculator className="w-6 h-6 text-white" />
+                  <Calculator className="w-6 h-6 text-foreground" />
                 )}
                 {windowId === "music" && (
-                  <Music className="w-6 h-6 text-white" />
+                  <Music className="w-6 h-6 text-foreground" />
                 )}
                 {windowId === "musicpro" && (
-                  <Music className="w-6 h-6 text-white" />
+                  <Music className="w-6 h-6 text-foreground" />
                 )}
                 {windowId === "photos" && (
-                  <Image className="w-6 h-6 text-white" />
+                  <Image className="w-6 h-6 text-foreground" />
                 )}
                 {windowId === "games" && (
-                  <Gamepad2 className="w-6 h-6 text-white" />
+                  <Gamepad2 className="w-6 h-6 text-foreground" />
                 )}
                 {windowId === "browser" && (
-                  <Chrome className="w-6 h-6 text-white" />
+                  <Chrome className="w-6 h-6 text-foreground" />
                 )}
                 {windowId === "downloads" && (
-                  <Download className="w-6 h-6 text-white" />
+                  <Download className="w-6 h-6 text-foreground" />
                 )}
                 {windowId === "filebrowser" && (
-                  <HardDrive className="w-6 h-6 text-white" />
+                  <HardDrive className="w-6 h-6 text-foreground" />
                 )}
                 {windowId === "markdown" && (
-                  <Edit className="w-6 h-6 text-white" />
+                  <Edit className="w-6 h-6 text-foreground" />
+                )}
+                {windowId === "changelog" && (
+                  <FileText className="w-6 h-6 text-foreground" />
+                )}
+                {windowId === "settings" && (
+                  <Settings className="w-6 h-6 text-foreground" />
+                )}
+                {windowId === "secret" && (
+                  <Eye className="w-6 h-6 text-foreground" />
                 )}
                 {!isMinimized && activeWindow === windowId && (
-                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full"></div>
+                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary rounded-full"></div>
                 )}
               </div>
             );
           })}
 
           {/* Separator */}
-          <div className="w-px h-8 bg-white/30"></div>
+          <div className="w-px h-8 bg-border"></div>
 
           {/* System Info */}
-          <div className="text-white text-sm font-medium">
+          <div className="text-foreground text-sm font-medium">
             {new Date().toLocaleTimeString("en-US", {
               hour: "2-digit",
               minute: "2-digit",

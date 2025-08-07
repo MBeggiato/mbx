@@ -602,13 +602,8 @@ export default function ModernOSHomepage() {
   };
 
   const handleThemeChange = (theme: "light" | "dark" | "system") => {
-    console.log("Page: handleThemeChange called with:", theme);
-    console.log("Page: mounted state:", mounted);
     if (mounted) {
       setTheme(theme);
-      console.log("Page: setTheme called");
-    } else {
-      console.log("Page: Not mounted yet, skipping setTheme");
     }
   };
 
@@ -676,13 +671,6 @@ export default function ModernOSHomepage() {
           onToggleWindow={toggleWindow}
           onDoubleClick={handleDesktopDoubleClick}
         />
-
-        {/* Debug Theme Display */}
-        {mounted && (
-          <div className="fixed top-4 left-4 z-[9999] bg-background border border-border text-foreground px-3 py-2 rounded-md text-sm font-medium shadow-lg">
-            Current Theme: {theme || "loading..."}
-          </div>
-        )}
 
         {/* Share Button */}
         {openWindows.length > 0 && (
