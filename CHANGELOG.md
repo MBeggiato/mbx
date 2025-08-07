@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhanced Markdown Editor with better multi-file management
 - Improved file navigation and organization
 - 📚 add test file for automation demo
+- 🔧 remove test file
 ### Fixed
 
 - Context menu appearing and functioning correctly

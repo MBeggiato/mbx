@@ -101,22 +101,23 @@ BREAKING CHANGE: Theme configuration format has changed
 
 ### 🏷️ **Available Types**
 
-| Type | Icon | Section | Description | Version Impact |
-|------|------|---------|-------------|----------------|
-| `feat` | ✨ | Added | New features | Minor |
-| `fix` | 🐛 | Fixed | Bug fixes | Patch |
-| `docs` | 📚 | Changed | Documentation | None |
-| `style` | 💄 | Changed | Code style (formatting) | None |
-| `refactor` | ♻️ | Changed | Code refactoring | None |
-| `perf` | ⚡ | Changed | Performance improvements | Patch |
-| `test` | 🧪 | Changed | Test updates | None |
-| `chore` | 🔧 | Changed | Maintenance tasks | None |
-| `ci` | 👷 | Changed | CI/CD changes | None |
-| `build` | 📦 | Changed | Build system changes | None |
+| Type       | Icon | Section | Description              | Version Impact |
+| ---------- | ---- | ------- | ------------------------ | -------------- |
+| `feat`     | ✨   | Added   | New features             | Minor          |
+| `fix`      | 🐛   | Fixed   | Bug fixes                | Patch          |
+| `docs`     | 📚   | Changed | Documentation            | None           |
+| `style`    | 💄   | Changed | Code style (formatting)  | None           |
+| `refactor` | ♻️   | Changed | Code refactoring         | None           |
+| `perf`     | ⚡   | Changed | Performance improvements | Patch          |
+| `test`     | 🧪   | Changed | Test updates             | None           |
+| `chore`    | 🔧   | Changed | Maintenance tasks        | None           |
+| `ci`       | 👷   | Changed | CI/CD changes            | None           |
+| `build`    | 📦   | Changed | Build system changes     | None           |
 
 ### 🚨 **Breaking Changes**
 
 To indicate breaking changes, use:
+
 - `feat!:` or `fix!:` (with exclamation mark)
 - Include `BREAKING CHANGE:` in the footer
 
@@ -125,11 +126,13 @@ To indicate breaking changes, use:
 ### 🛠️ **Initial Setup**
 
 1. **Configure Git hooks**:
+
 ```bash
 npm run setup:hooks
 ```
 
 2. **Verify setup**:
+
 ```bash
 git config core.hooksPath
 # Should show: .githooks
@@ -149,6 +152,7 @@ npm run commit
 ```
 
 The helper will:
+
 - ✅ Show you staged files
 - ✅ Guide you through commit type selection
 - ✅ Help format the message correctly
@@ -182,12 +186,14 @@ node scripts/update-changelog.js "feat: add new feature"
 ### 📋 **Step-by-Step Process**
 
 1. **Make Changes**:
+
 ```bash
 # Edit your files
 code components/apps/MyNewApp.tsx
 ```
 
 2. **Stage Changes**:
+
 ```bash
 # Stage specific files
 git add components/apps/MyNewApp.tsx
@@ -197,11 +203,13 @@ git add .
 ```
 
 3. **Check Status**:
+
 ```bash
 git status
 ```
 
 4. **Create Commit**:
+
 ```bash
 # Option A: Use helper (recommended)
 npm run commit
@@ -211,12 +219,14 @@ git commit -m "feat(apps): add new productivity app"
 ```
 
 5. **Verify Changelog**:
+
 ```bash
 # Check that changelog was updated
 git diff HEAD~1 CHANGELOG.md
 ```
 
 6. **Push Changes**:
+
 ```bash
 git push origin main
 ```
@@ -231,24 +241,24 @@ Edit `changelog.config.js` to customize:
 module.exports = {
   // Automatic version release
   autoRelease: false, // Set to true for auto-versioning
-  
+
   // Custom commit types
   types: {
     feat: {
-      section: 'Added',
-      icon: '✨ ',
-      description: 'New features'
+      section: "Added",
+      icon: "✨ ",
+      description: "New features",
     },
     // ... more types
   },
-  
+
   // Version bump rules
   versionRules: {
-    major: ['feat'], // Breaking changes
-    minor: ['feat'], // New features  
-    patch: ['fix', 'perf'], // Bug fixes
-    none: ['docs', 'style', 'refactor', 'test', 'chore']
-  }
+    major: ["feat"], // Breaking changes
+    minor: ["feat"], // New features
+    patch: ["fix", "perf"], // Bug fixes
+    none: ["docs", "style", "refactor", "test", "chore"],
+  },
 };
 ```
 
@@ -293,7 +303,7 @@ fix: resolve memory leak in file browser
 docs: update API documentation
 refactor: simplify authentication flow
 
-# ❌ Poor examples  
+# ❌ Poor examples
 update stuff
 fixed bug
 changes
@@ -305,17 +315,19 @@ WIP
 ### 🎯 **Real-World Examples**
 
 #### **New Feature**
+
 ```bash
 feat(apps): add changelog viewer app
 
 Implement comprehensive changelog display with:
 - Markdown parsing and rendering
-- Search and filter functionality  
+- Search and filter functionality
 - Version navigation
 - Export capabilities
 ```
 
 #### **Bug Fix**
+
 ```bash
 fix(ui): resolve context menu positioning
 
@@ -325,6 +337,7 @@ that caused menus to disappear immediately.
 ```
 
 #### **Breaking Change**
+
 ```bash
 feat(api)!: redesign file system interface
 
@@ -336,17 +349,19 @@ instead of boolean. Update all file operations accordingly.
 ```
 
 #### **Documentation**
+
 ```bash
 docs: add app development guide
 
 Create comprehensive guide covering:
 - Component architecture
-- Window system integration  
+- Window system integration
 - File system usage
 - Styling guidelines
 ```
 
 #### **Performance Improvement**
+
 ```bash
 perf(rendering): optimize window redraw performance
 
@@ -363,13 +378,16 @@ These commits would generate changelog entries like:
 ## [Unreleased]
 
 ### Added
+
 - ✨ **apps**: Changelog viewer app with markdown parsing and search
 - ✨ **api**: Redesigned file system interface (BREAKING CHANGE)
 
-### Fixed  
+### Fixed
+
 - 🐛 **ui**: Context menu positioning in file browser
 
 ### Changed
+
 - ⚡ **rendering**: Optimized window redraw performance (~40% improvement)
 - 📚 App development guide with comprehensive examples
 ```
@@ -383,6 +401,7 @@ These commits would generate changelog entries like:
 **Problem**: Changelog doesn't update automatically
 
 **Solution**:
+
 ```bash
 # Check hook configuration
 git config core.hooksPath
@@ -401,6 +420,7 @@ ls -la .githooks/pre-commit
 **Problem**: "Node.js not found" error in hook
 
 **Solution**:
+
 ```bash
 # Check Node.js installation
 node --version
@@ -415,6 +435,7 @@ which node
 **Problem**: "Unknown commit type" message
 
 **Solution**:
+
 ```bash
 # Check available types in changelog.config.js
 cat changelog.config.js | grep -A 5 "types:"
@@ -428,6 +449,7 @@ git commit -m "feat: your feature description"
 **Problem**: Entries appear in wrong section
 
 **Solution**:
+
 ```bash
 # Manually run changelog update to test
 npm run changelog:update
@@ -528,7 +550,7 @@ releaseNotes: {
 The automated changelog system provides:
 
 - 🤖 **Automatic changelog updates** from conventional commits
-- 🎯 **Consistent formatting** across all entries  
+- 🎯 **Consistent formatting** across all entries
 - 🚀 **Easy-to-use tools** for creating proper commits
 - 📊 **Professional documentation** for releases
 - 👥 **Team collaboration** with standardized practices
@@ -545,7 +567,7 @@ npm run commit           # Interactive helper
 # or
 git commit -m "feat: add new feature"  # Manual
 
-# Manual operations  
+# Manual operations
 npm run changelog:update  # Update changelog manually
 ```
 
