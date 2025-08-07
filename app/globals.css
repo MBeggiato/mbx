@@ -121,3 +121,20 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Settings App Animation Controls */
+:root {
+  --animation-duration: 0.2s;
+}
+
+.no-animations * {
+  animation-duration: 0s !important;
+  transition-duration: 0s !important;
+}
+
+/* Dynamic settings variables */
+:root {
+  --app-font-size: 14px;
+  --window-transparency: 95%;
+  --accent-color: #3b82f6;
+}

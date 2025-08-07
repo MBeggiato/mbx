@@ -1,25 +1,37 @@
-'use client'
+"use client";
 
-import React, { useState, useEffect } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { 
-  Settings, 
-  Monitor, 
-  Palette, 
-  Volume2, 
-  Bell, 
-  Shield, 
-  User, 
+import React, { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Settings,
+  Monitor,
+  Palette,
+  Volume2,
+  Bell,
+  Shield,
+  User,
   Info,
   Download,
   Upload,
@@ -29,173 +41,101 @@ import {
   AlertTriangle,
   Moon,
   Sun,
-  Laptop
-} from 'lucide-react'
-import { useTheme } from 'next-themes'
-
-interface SettingsData {
-  // Appearance
-  theme: 'light' | 'dark' | 'system'
-  accentColor: string
-  fontSize: number
-  windowTransparency: number
-  animationsEnabled: boolean
-  
-  // Audio
-  masterVolume: number
-  notificationSounds: boolean
-  systemSounds: boolean
-  
-  // Notifications
-  showNotifications: boolean
-  notificationPosition: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
-  autoHideNotifications: boolean
-  notificationDuration: number
-  
-  // Privacy & Security
-  autoSave: boolean
-  dataCollection: boolean
-  errorReporting: boolean
-  
-  // System
-  startupApps: string[]
-  autoUpdate: boolean
-  language: string
-  timezone: string
-  
-  // User Profile
-  username: string
-  email: string
-  avatar: string
-}
-
-const defaultSettings: SettingsData = {
-  theme: 'system',
-  accentColor: '#3b82f6',
-  fontSize: 14,
-  windowTransparency: 95,
-  animationsEnabled: true,
-  masterVolume: 75,
-  notificationSounds: true,
-  systemSounds: true,
-  showNotifications: true,
-  notificationPosition: 'top-right',
-  autoHideNotifications: true,
-  notificationDuration: 5,
-  autoSave: true,
-  dataCollection: false,
-  errorReporting: true,
-  startupApps: [],
-  autoUpdate: true,
-  language: 'en',
-  timezone: 'UTC',
-  username: 'User',
-  email: '',
-  avatar: ''
-}
+  Laptop,
+} from "lucide-react";
+import { useTheme } from "next-themes";
+import { useSettings, AppSettings } from "@/components/SettingsContext";
 
 interface SettingsAppProps {
-  onClose?: () => void
+  onClose?: () => void;
 }
 
 export default function SettingsApp({ onClose }: SettingsAppProps) {
-  const [settings, setSettings] = useState<SettingsData>(defaultSettings)
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
-  const [activeTab, setActiveTab] = useState('appearance')
-  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
-  const { theme, setTheme } = useTheme()
-
-  // Load settings from localStorage on mount
-  useEffect(() => {
-    const savedSettings = localStorage.getItem('mbx-settings')
-    if (savedSettings) {
-      try {
-        const parsed = JSON.parse(savedSettings)
-        setSettings({ ...defaultSettings, ...parsed })
-      } catch (error) {
-        console.error('Failed to parse saved settings:', error)
-      }
-    }
-  }, [])
+  const {
+    settings,
+    updateSetting: updateGlobalSetting,
+    saveSettings: saveGlobalSettings,
+    resetSettings: resetGlobalSettings,
+    exportSettings: exportGlobalSettings,
+    importSettings: importGlobalSettings,
+  } = useSettings();
+  
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [activeTab, setActiveTab] = useState("appearance");
+  const [saveStatus, setSaveStatus] = useState<
+    "idle" | "saving" | "saved" | "error"
+  >("idle");
+  const { theme, setTheme } = useTheme();
 
   // Update settings and mark as changed
-  const updateSetting = <K extends keyof SettingsData>(
-    key: K, 
-    value: SettingsData[K]
+  const updateSetting = <K extends keyof AppSettings>(
+    key: K,
+    value: AppSettings[K]
   ) => {
-    setSettings(prev => ({ ...prev, [key]: value }))
-    setHasUnsavedChanges(true)
-    setSaveStatus('idle')
-  }
+    updateGlobalSetting(key, value);
+    setHasUnsavedChanges(true);
+    setSaveStatus("idle");
+  };
 
   // Save settings to localStorage
   const saveSettings = async () => {
-    setSaveStatus('saving')
+    setSaveStatus("saving");
     try {
-      localStorage.setItem('mbx-settings', JSON.stringify(settings))
-      
+      await saveGlobalSettings();
+
       // Apply theme change immediately
       if (settings.theme !== theme) {
-        setTheme(settings.theme)
+        setTheme(settings.theme);
       }
-      
+
       // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 500))
-      
-      setSaveStatus('saved')
-      setHasUnsavedChanges(false)
-      
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      setSaveStatus("saved");
+      setHasUnsavedChanges(false);
+
       // Clear saved status after 3 seconds
-      setTimeout(() => setSaveStatus('idle'), 3000)
+      setTimeout(() => setSaveStatus("idle"), 3000);
     } catch (error) {
-      console.error('Failed to save settings:', error)
-      setSaveStatus('error')
+      console.error("Failed to save settings:", error);
+      setSaveStatus("error");
     }
-  }
+  };
 
   // Reset settings to defaults
   const resetSettings = () => {
-    setSettings(defaultSettings)
-    setHasUnsavedChanges(true)
-    setSaveStatus('idle')
-  }
+    resetGlobalSettings();
+    setHasUnsavedChanges(true);
+    setSaveStatus("idle");
+  };
 
   // Export settings
   const exportSettings = () => {
-    const dataStr = JSON.stringify(settings, null, 2)
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr)
-    
-    const exportFileDefaultName = `mbx-settings-${new Date().toISOString().split('T')[0]}.json`
-    
-    const linkElement = document.createElement('a')
-    linkElement.setAttribute('href', dataUri)
-    linkElement.setAttribute('download', exportFileDefaultName)
-    linkElement.click()
-  }
+    exportGlobalSettings();
+  };
 
   // Import settings
   const importSettings = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (!file) return
+    const file = event.target.files?.[0];
+    if (!file) return;
 
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      try {
-        const imported = JSON.parse(e.target?.result as string)
-        setSettings({ ...defaultSettings, ...imported })
-        setHasUnsavedChanges(true)
-        setSaveStatus('idle')
-      } catch (error) {
-        console.error('Failed to import settings:', error)
-        setSaveStatus('error')
-      }
+    try {
+      importGlobalSettings(file);
+      setHasUnsavedChanges(true);
+      setSaveStatus("idle");
+    } catch (error) {
+      console.error("Failed to import settings:", error);
+      setSaveStatus("error");
     }
-    reader.readAsText(file)
-  }
+  };
 
   const availableApps = [
-    'File Browser', 'Markdown Editor', 'Calculator', 'Changelog', 'Settings'
-  ]
+    "File Browser",
+    "Markdown Editor",
+    "Calculator",
+    "Changelog",
+    "Settings",
+  ];
 
   return (
     <div className="flex flex-col h-full bg-background">
@@ -210,40 +150,40 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
             </p>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-2">
           {hasUnsavedChanges && (
             <Badge variant="outline" className="text-orange-600">
               Unsaved changes
             </Badge>
           )}
-          
-          {saveStatus === 'saved' && (
+
+          {saveStatus === "saved" && (
             <Badge variant="outline" className="text-green-600">
               <Check className="h-3 w-3 mr-1" />
               Saved
             </Badge>
           )}
-          
-          {saveStatus === 'error' && (
+
+          {saveStatus === "error" && (
             <Badge variant="destructive">
               <AlertTriangle className="h-3 w-3 mr-1" />
               Error
             </Badge>
           )}
-          
-          <Button 
-            onClick={saveSettings} 
-            disabled={!hasUnsavedChanges || saveStatus === 'saving'}
+
+          <Button
+            onClick={saveSettings}
+            disabled={!hasUnsavedChanges || saveStatus === "saving"}
             size="sm"
           >
-            {saveStatus === 'saving' ? (
+            {saveStatus === "saving" ? (
               <>
                 <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
                 Saving...
               </>
             ) : (
-              'Save Changes'
+              "Save Changes"
             )}
           </Button>
         </div>
@@ -261,7 +201,10 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
               <Volume2 className="h-4 w-4" />
               <span className="hidden sm:inline">Audio</span>
             </TabsTrigger>
-            <TabsTrigger value="notifications" className="flex items-center gap-2">
+            <TabsTrigger
+              value="notifications"
+              className="flex items-center gap-2"
+            >
               <Bell className="h-4 w-4" />
               <span className="hidden sm:inline">Notifications</span>
             </TabsTrigger>
@@ -297,8 +240,8 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
                   <Label>Theme</Label>
                   <Select
                     value={settings.theme}
-                    onValueChange={(value: 'light' | 'dark' | 'system') => 
-                      updateSetting('theme', value)
+                    onValueChange={(value: "light" | "dark" | "system") =>
+                      updateSetting("theme", value)
                     }
                   >
                     <SelectTrigger>
@@ -332,18 +275,24 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
                   <Label>Accent Color</Label>
                   <div className="flex gap-2 flex-wrap">
                     {[
-                      '#3b82f6', '#ef4444', '#10b981', '#f59e0b', 
-                      '#8b5cf6', '#ec4899', '#06b6d4', '#84cc16'
+                      "#3b82f6",
+                      "#ef4444",
+                      "#10b981",
+                      "#f59e0b",
+                      "#8b5cf6",
+                      "#ec4899",
+                      "#06b6d4",
+                      "#84cc16",
                     ].map((color) => (
                       <button
                         key={color}
                         className={`w-8 h-8 rounded-full border-2 ${
-                          settings.accentColor === color 
-                            ? 'border-foreground scale-110' 
-                            : 'border-border'
+                          settings.accentColor === color
+                            ? "border-foreground scale-110"
+                            : "border-border"
                         }`}
                         style={{ backgroundColor: color }}
-                        onClick={() => updateSetting('accentColor', color)}
+                        onClick={() => updateSetting("accentColor", color)}
                       />
                     ))}
                   </div>
@@ -354,7 +303,9 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
                   <Label>Font Size: {settings.fontSize}px</Label>
                   <Slider
                     value={[settings.fontSize]}
-                    onValueChange={(value) => updateSetting('fontSize', value[0])}
+                    onValueChange={(value) =>
+                      updateSetting("fontSize", value[0])
+                    }
                     min={12}
                     max={20}
                     step={1}
@@ -364,10 +315,14 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
 
                 {/* Window Transparency */}
                 <div className="space-y-2">
-                  <Label>Window Transparency: {settings.windowTransparency}%</Label>
+                  <Label>
+                    Window Transparency: {settings.windowTransparency}%
+                  </Label>
                   <Slider
                     value={[settings.windowTransparency]}
-                    onValueChange={(value) => updateSetting('windowTransparency', value[0])}
+                    onValueChange={(value) =>
+                      updateSetting("windowTransparency", value[0])
+                    }
                     min={70}
                     max={100}
                     step={5}
@@ -385,7 +340,9 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
                   </div>
                   <Switch
                     checked={settings.animationsEnabled}
-                    onCheckedChange={(checked) => updateSetting('animationsEnabled', checked)}
+                    onCheckedChange={(checked) =>
+                      updateSetting("animationsEnabled", checked)
+                    }
                   />
                 </div>
               </CardContent>
@@ -410,7 +367,9 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
                   <Label>Master Volume: {settings.masterVolume}%</Label>
                   <Slider
                     value={[settings.masterVolume]}
-                    onValueChange={(value) => updateSetting('masterVolume', value[0])}
+                    onValueChange={(value) =>
+                      updateSetting("masterVolume", value[0])
+                    }
                     min={0}
                     max={100}
                     step={5}
@@ -431,7 +390,9 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
                     </div>
                     <Switch
                       checked={settings.notificationSounds}
-                      onCheckedChange={(checked) => updateSetting('notificationSounds', checked)}
+                      onCheckedChange={(checked) =>
+                        updateSetting("notificationSounds", checked)
+                      }
                     />
                   </div>
 
@@ -444,7 +405,9 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
                     </div>
                     <Switch
                       checked={settings.systemSounds}
-                      onCheckedChange={(checked) => updateSetting('systemSounds', checked)}
+                      onCheckedChange={(checked) =>
+                        updateSetting("systemSounds", checked)
+                      }
                     />
                   </div>
                 </div>
@@ -475,20 +438,24 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
                   </div>
                   <Switch
                     checked={settings.showNotifications}
-                    onCheckedChange={(checked) => updateSetting('showNotifications', checked)}
+                    onCheckedChange={(checked) =>
+                      updateSetting("showNotifications", checked)
+                    }
                   />
                 </div>
 
                 {settings.showNotifications && (
                   <>
                     <Separator />
-                    
+
                     {/* Notification Position */}
                     <div className="space-y-2">
                       <Label>Notification Position</Label>
                       <Select
                         value={settings.notificationPosition}
-                        onValueChange={(value: any) => updateSetting('notificationPosition', value)}
+                        onValueChange={(value: any) =>
+                          updateSetting("notificationPosition", value)
+                        }
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -496,8 +463,12 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
                         <SelectContent>
                           <SelectItem value="top-right">Top Right</SelectItem>
                           <SelectItem value="top-left">Top Left</SelectItem>
-                          <SelectItem value="bottom-right">Bottom Right</SelectItem>
-                          <SelectItem value="bottom-left">Bottom Left</SelectItem>
+                          <SelectItem value="bottom-right">
+                            Bottom Right
+                          </SelectItem>
+                          <SelectItem value="bottom-left">
+                            Bottom Left
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -512,17 +483,23 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
                       </div>
                       <Switch
                         checked={settings.autoHideNotifications}
-                        onCheckedChange={(checked) => updateSetting('autoHideNotifications', checked)}
+                        onCheckedChange={(checked) =>
+                          updateSetting("autoHideNotifications", checked)
+                        }
                       />
                     </div>
 
                     {/* Duration */}
                     {settings.autoHideNotifications && (
                       <div className="space-y-2">
-                        <Label>Auto-hide Duration: {settings.notificationDuration}s</Label>
+                        <Label>
+                          Auto-hide Duration: {settings.notificationDuration}s
+                        </Label>
                         <Slider
                           value={[settings.notificationDuration]}
-                          onValueChange={(value) => updateSetting('notificationDuration', value[0])}
+                          onValueChange={(value) =>
+                            updateSetting("notificationDuration", value[0])
+                          }
                           min={3}
                           max={15}
                           step={1}
@@ -558,7 +535,9 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
                   </div>
                   <Switch
                     checked={settings.autoSave}
-                    onCheckedChange={(checked) => updateSetting('autoSave', checked)}
+                    onCheckedChange={(checked) =>
+                      updateSetting("autoSave", checked)
+                    }
                   />
                 </div>
 
@@ -571,7 +550,9 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
                   </div>
                   <Switch
                     checked={settings.dataCollection}
-                    onCheckedChange={(checked) => updateSetting('dataCollection', checked)}
+                    onCheckedChange={(checked) =>
+                      updateSetting("dataCollection", checked)
+                    }
                   />
                 </div>
 
@@ -584,7 +565,9 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
                   </div>
                   <Switch
                     checked={settings.errorReporting}
-                    onCheckedChange={(checked) => updateSetting('errorReporting', checked)}
+                    onCheckedChange={(checked) =>
+                      updateSetting("errorReporting", checked)
+                    }
                   />
                 </div>
 
@@ -593,8 +576,9 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
                 <Alert>
                   <Info className="h-4 w-4" />
                   <AlertDescription>
-                    All data is stored locally in your browser. No personal information 
-                    is transmitted to external servers without your explicit consent.
+                    All data is stored locally in your browser. No personal
+                    information is transmitted to external servers without your
+                    explicit consent.
                   </AlertDescription>
                 </Alert>
               </CardContent>
@@ -622,15 +606,24 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
                   </p>
                   <div className="space-y-2">
                     {availableApps.map((app) => (
-                      <div key={app} className="flex items-center justify-between">
+                      <div
+                        key={app}
+                        className="flex items-center justify-between"
+                      >
                         <Label>{app}</Label>
                         <Switch
                           checked={settings.startupApps.includes(app)}
                           onCheckedChange={(checked) => {
                             if (checked) {
-                              updateSetting('startupApps', [...settings.startupApps, app])
+                              updateSetting("startupApps", [
+                                ...settings.startupApps,
+                                app,
+                              ]);
                             } else {
-                              updateSetting('startupApps', settings.startupApps.filter(a => a !== app))
+                              updateSetting(
+                                "startupApps",
+                                settings.startupApps.filter((a) => a !== app)
+                              );
                             }
                           }}
                         />
@@ -651,7 +644,9 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
                   </div>
                   <Switch
                     checked={settings.autoUpdate}
-                    onCheckedChange={(checked) => updateSetting('autoUpdate', checked)}
+                    onCheckedChange={(checked) =>
+                      updateSetting("autoUpdate", checked)
+                    }
                   />
                 </div>
 
@@ -660,7 +655,7 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
                   <Label>Language</Label>
                   <Select
                     value={settings.language}
-                    onValueChange={(value) => updateSetting('language', value)}
+                    onValueChange={(value) => updateSetting("language", value)}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -679,15 +674,19 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
                   <Label>Timezone</Label>
                   <Select
                     value={settings.timezone}
-                    onValueChange={(value) => updateSetting('timezone', value)}
+                    onValueChange={(value) => updateSetting("timezone", value)}
                   >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="UTC">UTC</SelectItem>
-                      <SelectItem value="Europe/Berlin">Europe/Berlin</SelectItem>
-                      <SelectItem value="America/New_York">America/New_York</SelectItem>
+                      <SelectItem value="Europe/Berlin">
+                        Europe/Berlin
+                      </SelectItem>
+                      <SelectItem value="America/New_York">
+                        America/New_York
+                      </SelectItem>
                       <SelectItem value="Asia/Tokyo">Asia/Tokyo</SelectItem>
                     </SelectContent>
                   </Select>
@@ -715,7 +714,7 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
                   <Input
                     id="username"
                     value={settings.username}
-                    onChange={(e) => updateSetting('username', e.target.value)}
+                    onChange={(e) => updateSetting("username", e.target.value)}
                     placeholder="Enter your username"
                   />
                 </div>
@@ -727,7 +726,7 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
                     id="email"
                     type="email"
                     value={settings.email}
-                    onChange={(e) => updateSetting('email', e.target.value)}
+                    onChange={(e) => updateSetting("email", e.target.value)}
                     placeholder="Enter your email"
                   />
                 </div>
@@ -737,17 +736,17 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
                 {/* Data Management */}
                 <div className="space-y-4">
                   <h3 className="font-medium">Data Management</h3>
-                  
+
                   <div className="flex flex-col sm:flex-row gap-2">
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       onClick={exportSettings}
                       className="flex items-center gap-2"
                     >
                       <Download className="h-4 w-4" />
                       Export Settings
                     </Button>
-                    
+
                     <div className="relative">
                       <input
                         type="file"
@@ -755,14 +754,17 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
                         onChange={importSettings}
                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                       />
-                      <Button variant="outline" className="flex items-center gap-2 w-full">
+                      <Button
+                        variant="outline"
+                        className="flex items-center gap-2 w-full"
+                      >
                         <Upload className="h-4 w-4" />
                         Import Settings
                       </Button>
                     </div>
-                    
-                    <Button 
-                      variant="destructive" 
+
+                    <Button
+                      variant="destructive"
                       onClick={resetSettings}
                       className="flex items-center gap-2"
                     >
@@ -780,15 +782,15 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
       {/* Footer */}
       <div className="border-t p-4">
         <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <div>
-            Mbx OS Settings v0.2.0
-          </div>
+          <div>Mbx OS Settings v0.2.0</div>
           <div className="flex items-center gap-4">
             <span>Current Theme: {settings.theme}</span>
-            <span>Last Saved: {saveStatus === 'saved' ? 'Just now' : 'Not saved'}</span>
+            <span>
+              Last Saved: {saveStatus === "saved" ? "Just now" : "Not saved"}
+            </span>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

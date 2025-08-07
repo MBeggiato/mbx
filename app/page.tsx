@@ -21,6 +21,7 @@ import MarkdownEditorApp from "@/components/apps/MarkdownEditorApp";
 import FileBrowserApp from "@/components/apps/FileBrowserApp";
 import ChangelogApp from "@/components/apps/ChangelogApp";
 import SettingsApp from "@/components/apps/SettingsApp";
+import { SettingsProvider } from "@/components/SettingsContext";
 
 export default function ModernOSHomepage() {
   const [openWindows, setOpenWindows] = useState<string[]>([]);
@@ -34,6 +35,17 @@ export default function ModernOSHomepage() {
   const [isPartyMode, setIsPartyMode] = useState(false);
   const [showSecretMessage, setShowSecretMessage] = useState(false);
   const [isNeonMode, setIsNeonMode] = useState(false);
+
+  // Settings State
+  const [startupApps, setStartupApps] = useState<string[]>([]);
+  const [animationsEnabled, setAnimationsEnabled] = useState(true);
+  const [masterVolume, setMasterVolume] = useState(75);
+  const [notificationSettings, setNotificationSettings] = useState({
+    showNotifications: true,
+    notificationPosition: 'top-right' as const,
+    autoHideNotifications: true,
+    notificationDuration: 5,
+  });
 
   const [windowStates, setWindowStates] = useState<Record<string, WindowState>>(
     {
@@ -541,6 +553,46 @@ export default function ModernOSHomepage() {
     }));
   };
 
+  // Settings callback functions
+  const handleStartupAppsChange = (apps: string[]) => {
+    setStartupApps(apps);
+    // Auto-open startup apps when setting is applied
+    apps.forEach(appId => {
+      if (!openWindows.includes(appId)) {
+        toggleWindow(appId);
+      }
+    });
+  };
+
+  const handleAnimationsChange = (enabled: boolean) => {
+    setAnimationsEnabled(enabled);
+    // Apply animations globally
+    document.documentElement.style.setProperty(
+      '--animation-duration', 
+      enabled ? '0.2s' : '0s'
+    );
+    if (enabled) {
+      document.documentElement.classList.remove('no-animations');
+    } else {
+      document.documentElement.classList.add('no-animations');
+    }
+  };
+
+  const handleVolumeChange = (volume: number) => {
+    setMasterVolume(volume);
+    // Apply volume to all audio elements
+    const audioElements = document.querySelectorAll('audio');
+    audioElements.forEach(audio => {
+      audio.volume = volume / 100;
+    });
+  };
+
+  const handleNotificationSettingsChange = (settings: any) => {
+    setNotificationSettings(settings);
+    // Apply notification settings to the system
+    // This would integrate with a notification system
+  };
+
   // Easter Egg: Right-click context menu (now moved to Downloads app)
   // const handleRightClick = (e: React.MouseEvent) => {
   //   e.preventDefault();
@@ -585,11 +637,17 @@ export default function ModernOSHomepage() {
   }, [openWindows, toggleWindow]);
 
   return (
-    <div
-      className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden ${
-        isNeonMode ? "neon-mode" : ""
-      }`}
+    <SettingsProvider
+      onStartupAppsChange={handleStartupAppsChange}
+      onAnimationsChange={handleAnimationsChange}
+      onVolumeChange={handleVolumeChange}
+      onNotificationSettingsChange={handleNotificationSettingsChange}
     >
+      <div
+        className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden ${
+          isNeonMode ? "neon-mode" : ""
+        }`}
+      >
       {/* Modern Wallpaper Background */}
       <Background />
 
@@ -948,6 +1006,7 @@ export default function ModernOSHomepage() {
         onClose={() => setIsStartMenuOpen(false)}
         onToggleWindow={toggleWindow}
       />
-    </div>
+      </div>
+    </SettingsProvider>
   );
 }
