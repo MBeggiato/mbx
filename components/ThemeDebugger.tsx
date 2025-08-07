@@ -18,6 +18,11 @@ export default function ThemeDebugger() {
       <h3 className="font-bold mb-2">Theme Debugger</h3>
       <p>Current theme: {theme}</p>
       <p>Available themes: {themes?.join(", ")}</p>
+      <div 
+        className="w-4 h-4 mb-2 border border-gray-500" 
+        style={{ backgroundColor: 'var(--test-color)' }}
+        title="Should be red in light mode, green in dark mode"
+      ></div>
       <div className="flex gap-2 mt-2">
         <button
           onClick={() => setTheme("light")}

@@ -39,7 +39,7 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-.dark {
+html.dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.145 0 0);
@@ -72,6 +72,8 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
+  --desktop-bg: linear-gradient(to bottom right, rgb(2 6 23), rgb(30 8 68), rgb(2 6 23));
+  --test-color: #00ff00; /* Green for dark mode */
 }
 
 @theme inline {
@@ -129,10 +131,12 @@
   --window-transparency: 95%;
   --accent-color: #3b82f6;
   --desktop-bg: linear-gradient(to bottom right, rgb(15 23 42), rgb(88 28 135), rgb(15 23 42));
+  --test-color: #ff0000; /* Red for light mode */
 }
 
-.dark {
+html.dark {
   --desktop-bg: linear-gradient(to bottom right, rgb(2 6 23), rgb(30 8 68), rgb(2 6 23));
+  --test-color: #00ff00; /* Green for dark mode */
 }
 
 .no-animations * {
@@ -171,10 +175,10 @@
 }
 
 /* Easter egg modes compatibility with dark mode */
-.dark .neon-mode {
+html.dark .neon-mode {
   filter: brightness(0.8);
 }
 
-.dark .matrix-mode {
+html.dark .matrix-mode {
   filter: hue-rotate(180deg) brightness(0.7);
 }

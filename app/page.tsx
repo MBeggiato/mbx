@@ -605,10 +605,9 @@ export default function ModernOSHomepage() {
   const handleThemeChange = (theme: "light" | "dark" | "system") => {
     console.log("Theme change requested:", theme);
     console.log("Current theme before change:", theme);
-    if (mounted) {
-      setTheme(theme);
-      console.log("Theme set via next-themes");
-    }
+    console.log("Mounted state:", mounted);
+    setTheme(theme);
+    console.log("Theme set via next-themes");
   };
 
   // Easter Egg: Right-click context menu (now moved to Downloads app)
