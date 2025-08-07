@@ -20,6 +20,7 @@ import SecretApp from "@/components/apps/SecretApp";
 import MarkdownEditorApp from "@/components/apps/MarkdownEditorApp";
 import FileBrowserApp from "@/components/apps/FileBrowserApp";
 import ChangelogApp from "@/components/apps/ChangelogApp";
+import SettingsApp from "@/components/apps/SettingsApp";
 
 export default function ModernOSHomepage() {
   const [openWindows, setOpenWindows] = useState<string[]>([]);
@@ -77,6 +78,13 @@ export default function ModernOSHomepage() {
         isMinimized: false,
         isMaximized: false,
         zIndex: 15,
+      },
+      settings: {
+        position: { x: 300, y: 100 },
+        size: { width: 900, height: 700 },
+        isMinimized: false,
+        isMaximized: false,
+        zIndex: 14,
       },
       musicpro: {
         position: { x: 300, y: 180 },
@@ -775,6 +783,22 @@ export default function ModernOSHomepage() {
           onUpdateState={(updates) => updateWindowState("changelog", updates)}
         >
           <ChangelogApp />
+        </ModernWindow>
+      )}
+
+      {openWindows.includes("settings") && (
+        <ModernWindow
+          windowId="settings"
+          title="Settings"
+          isActive={activeWindow === "settings"}
+          windowState={windowStates.settings}
+          onClose={() => closeWindow("settings")}
+          onMinimize={() => minimizeWindow("settings")}
+          onMaximize={() => maximizeWindow("settings")}
+          onFocus={() => bringToFront("settings")}
+          onUpdateState={(updates) => updateWindowState("settings", updates)}
+        >
+          <SettingsApp />
         </ModernWindow>
       )}
 

@@ -45,6 +45,12 @@ const systemApps = [
     category: "System",
   },
   {
+    id: "settings",
+    name: "Settings",
+    icon: Settings,
+    category: "System",
+  },
+  {
     id: "markdown",
     name: "Markdown Editor",
     icon: Edit,
