@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 🔧 **Settings**: Reworked settings
 - 📚 **docs**: add dark mode testing guide
 - 🔧 **debug**: add theme debugging components and console logging
-
+- 🔧 **cleanup**: remove debug components and finalize dark mode implementation
 ### Fixed
 
 - 🐛 **css**: fix dark mode CSS specificity with html.dark selector

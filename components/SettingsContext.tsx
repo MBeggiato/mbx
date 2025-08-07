@@ -119,18 +119,29 @@ export function SettingsProvider({
   // Load settings from localStorage on mount
   useEffect(() => {
     const savedSettings = localStorage.getItem("mbx-settings");
+    console.log("SettingsContext: Loading settings from localStorage:", savedSettings);
     if (savedSettings) {
       try {
         const parsed = JSON.parse(savedSettings);
+        console.log("SettingsContext: Parsed settings:", parsed);
         const mergedSettings = { ...defaultSettings, ...parsed };
+        console.log("SettingsContext: Merged settings:", mergedSettings);
         setSettings(mergedSettings);
 
         // Apply theme immediately after loading settings
         if (mergedSettings.theme && onThemeChange) {
+          console.log("SettingsContext: Applying loaded theme:", mergedSettings.theme);
           onThemeChange(mergedSettings.theme);
         }
       } catch (error) {
         console.error("Failed to parse saved settings:", error);
+      }
+    } else {
+      console.log("SettingsContext: No saved settings found, using defaults");
+      // Apply default theme
+      if (defaultSettings.theme && onThemeChange) {
+        console.log("SettingsContext: Applying default theme:", defaultSettings.theme);
+        onThemeChange(defaultSettings.theme);
       }
     }
   }, [onThemeChange]);
@@ -164,12 +175,19 @@ export function SettingsProvider({
     key: K,
     value: AppSettings[K]
   ) => {
+    console.log(`SettingsContext: Updating ${key} to:`, value);
     setSettings((prev) => ({ ...prev, [key]: value }));
 
     // Apply changes immediately to the parent component
     switch (key) {
       case "theme":
+        console.log("SettingsContext: Calling onThemeChange with:", value);
         onThemeChange?.(value as "light" | "dark" | "system");
+        // Auto-save theme changes immediately
+        setTimeout(() => {
+          localStorage.setItem("mbx-settings", JSON.stringify({ ...settings, [key]: value }));
+          console.log("SettingsContext: Auto-saved theme change to localStorage");
+        }, 0);
         break;
       case "startupApps":
         onStartupAppsChange?.(value as string[]);

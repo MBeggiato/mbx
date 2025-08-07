@@ -25,10 +25,16 @@ import { SettingsProvider } from "@/components/SettingsContext";
 import { useTheme } from "next-themes";
 
 export default function ModernOSHomepage() {
-  const { setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const [openWindows, setOpenWindows] = useState<string[]>([]);
   const [activeWindow, setActiveWindow] = useState<string | null>(null);
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
+
+  // Ensure we're mounted before using theme
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Easter Egg States
   const [konamiSequence, setKonamiSequence] = useState<string[]>([]);
@@ -596,7 +602,14 @@ export default function ModernOSHomepage() {
   };
 
   const handleThemeChange = (theme: "light" | "dark" | "system") => {
-    setTheme(theme);
+    console.log("Page: handleThemeChange called with:", theme);
+    console.log("Page: mounted state:", mounted);
+    if (mounted) {
+      setTheme(theme);
+      console.log("Page: setTheme called");
+    } else {
+      console.log("Page: Not mounted yet, skipping setTheme");
+    }
   };
 
   // Easter Egg: Right-click context menu (now moved to Downloads app)
@@ -663,6 +676,11 @@ export default function ModernOSHomepage() {
           onToggleWindow={toggleWindow}
           onDoubleClick={handleDesktopDoubleClick}
         />
+
+        {/* Debug Theme Display */}
+        <div className="fixed top-4 left-4 z-[9999] bg-background border border-border text-foreground px-3 py-2 rounded-md text-sm font-medium shadow-lg">
+          Current Theme: {theme || 'loading...'}
+        </div>
 
         {/* Share Button */}
         {openWindows.length > 0 && (
