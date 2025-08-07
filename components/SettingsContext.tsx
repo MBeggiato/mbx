@@ -122,12 +122,18 @@ export function SettingsProvider({
     if (savedSettings) {
       try {
         const parsed = JSON.parse(savedSettings);
-        setSettings({ ...defaultSettings, ...parsed });
+        const mergedSettings = { ...defaultSettings, ...parsed };
+        setSettings(mergedSettings);
+        
+        // Apply theme immediately after loading settings
+        if (mergedSettings.theme && onThemeChange) {
+          onThemeChange(mergedSettings.theme);
+        }
       } catch (error) {
         console.error("Failed to parse saved settings:", error);
       }
     }
-  }, []);
+  }, [onThemeChange]);
 
   // Apply CSS custom properties for dynamic styling
   useEffect(() => {
