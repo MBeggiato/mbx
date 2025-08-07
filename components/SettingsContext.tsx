@@ -1,46 +1,56 @@
-'use client'
+"use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
 export interface AppSettings {
   // Appearance
-  theme: 'light' | 'dark' | 'system'
-  accentColor: string
-  fontSize: number
-  windowTransparency: number
-  animationsEnabled: boolean
-  
+  theme: "light" | "dark" | "system";
+  accentColor: string;
+  fontSize: number;
+  windowTransparency: number;
+  animationsEnabled: boolean;
+
   // Audio
-  masterVolume: number
-  notificationSounds: boolean
-  systemSounds: boolean
-  
+  masterVolume: number;
+  notificationSounds: boolean;
+  systemSounds: boolean;
+
   // Notifications
-  showNotifications: boolean
-  notificationPosition: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
-  autoHideNotifications: boolean
-  notificationDuration: number
-  
+  showNotifications: boolean;
+  notificationPosition:
+    | "top-right"
+    | "top-left"
+    | "bottom-right"
+    | "bottom-left";
+  autoHideNotifications: boolean;
+  notificationDuration: number;
+
   // Privacy & Security
-  autoSave: boolean
-  dataCollection: boolean
-  errorReporting: boolean
-  
+  autoSave: boolean;
+  dataCollection: boolean;
+  errorReporting: boolean;
+
   // System
-  startupApps: string[]
-  autoUpdate: boolean
-  language: string
-  timezone: string
-  
+  startupApps: string[];
+  autoUpdate: boolean;
+  language: string;
+  timezone: string;
+
   // User Profile
-  username: string
-  email: string
-  avatar: string
+  username: string;
+  email: string;
+  avatar: string;
 }
 
 const defaultSettings: AppSettings = {
-  theme: 'system',
-  accentColor: '#3b82f6',
+  theme: "system",
+  accentColor: "#3b82f6",
   fontSize: 14,
   windowTransparency: 95,
   animationsEnabled: true,
@@ -48,7 +58,7 @@ const defaultSettings: AppSettings = {
   notificationSounds: true,
   systemSounds: true,
   showNotifications: true,
-  notificationPosition: 'top-right',
+  notificationPosition: "top-right",
   autoHideNotifications: true,
   notificationDuration: 5,
   autoSave: true,
@@ -56,149 +66,175 @@ const defaultSettings: AppSettings = {
   errorReporting: true,
   startupApps: [],
   autoUpdate: true,
-  language: 'en',
-  timezone: 'UTC',
-  username: 'User',
-  email: '',
-  avatar: ''
-}
+  language: "en",
+  timezone: "UTC",
+  username: "User",
+  email: "",
+  avatar: "",
+};
 
 interface SettingsContextType {
-  settings: AppSettings
-  updateSetting: <K extends keyof AppSettings>(key: K, value: AppSettings[K]) => void
-  saveSettings: () => Promise<void>
-  resetSettings: () => void
-  exportSettings: () => void
-  importSettings: (file: File) => void
+  settings: AppSettings;
+  updateSetting: <K extends keyof AppSettings>(
+    key: K,
+    value: AppSettings[K]
+  ) => void;
+  saveSettings: () => Promise<void>;
+  resetSettings: () => void;
+  exportSettings: () => void;
+  importSettings: (file: File) => void;
 }
 
-const SettingsContext = createContext<SettingsContextType | undefined>(undefined)
+const SettingsContext = createContext<SettingsContextType | undefined>(
+  undefined
+);
 
 export function useSettings() {
-  const context = useContext(SettingsContext)
+  const context = useContext(SettingsContext);
   if (context === undefined) {
-    throw new Error('useSettings must be used within a SettingsProvider')
+    throw new Error("useSettings must be used within a SettingsProvider");
   }
-  return context
+  return context;
 }
 
 interface SettingsProviderProps {
-  children: ReactNode
-  onStartupAppsChange?: (apps: string[]) => void
-  onAnimationsChange?: (enabled: boolean) => void
-  onVolumeChange?: (volume: number) => void
-  onNotificationSettingsChange?: (settings: any) => void
+  children: ReactNode;
+  onStartupAppsChange?: (apps: string[]) => void;
+  onAnimationsChange?: (enabled: boolean) => void;
+  onVolumeChange?: (volume: number) => void;
+  onNotificationSettingsChange?: (settings: any) => void;
 }
 
-export function SettingsProvider({ 
-  children, 
+export function SettingsProvider({
+  children,
   onStartupAppsChange,
   onAnimationsChange,
   onVolumeChange,
-  onNotificationSettingsChange
+  onNotificationSettingsChange,
 }: SettingsProviderProps) {
-  const [settings, setSettings] = useState<AppSettings>(defaultSettings)
+  const [settings, setSettings] = useState<AppSettings>(defaultSettings);
 
   // Load settings from localStorage on mount
   useEffect(() => {
-    const savedSettings = localStorage.getItem('mbx-settings')
+    const savedSettings = localStorage.getItem("mbx-settings");
     if (savedSettings) {
       try {
-        const parsed = JSON.parse(savedSettings)
-        setSettings({ ...defaultSettings, ...parsed })
+        const parsed = JSON.parse(savedSettings);
+        setSettings({ ...defaultSettings, ...parsed });
       } catch (error) {
-        console.error('Failed to parse saved settings:', error)
+        console.error("Failed to parse saved settings:", error);
       }
     }
-  }, [])
+  }, []);
 
   // Apply CSS custom properties for dynamic styling
   useEffect(() => {
-    const root = document.documentElement
-    root.style.setProperty('--app-font-size', `${settings.fontSize}px`)
-    root.style.setProperty('--window-transparency', `${settings.windowTransparency}%`)
-    root.style.setProperty('--accent-color', settings.accentColor)
-    
+    const root = document.documentElement;
+    root.style.setProperty("--app-font-size", `${settings.fontSize}px`);
+    root.style.setProperty(
+      "--window-transparency",
+      `${settings.windowTransparency}%`
+    );
+    root.style.setProperty("--accent-color", settings.accentColor);
+
     // Apply animations
     if (settings.animationsEnabled) {
-      root.style.setProperty('--animation-duration', '0.2s')
-      root.classList.remove('no-animations')
+      root.style.setProperty("--animation-duration", "0.2s");
+      root.classList.remove("no-animations");
     } else {
-      root.style.setProperty('--animation-duration', '0s')
-      root.classList.add('no-animations')
+      root.style.setProperty("--animation-duration", "0s");
+      root.classList.add("no-animations");
     }
-  }, [settings.fontSize, settings.windowTransparency, settings.accentColor, settings.animationsEnabled])
+  }, [
+    settings.fontSize,
+    settings.windowTransparency,
+    settings.accentColor,
+    settings.animationsEnabled,
+  ]);
 
   const updateSetting = <K extends keyof AppSettings>(
     key: K,
     value: AppSettings[K]
   ) => {
-    setSettings(prev => ({ ...prev, [key]: value }))
-    
+    setSettings((prev) => ({ ...prev, [key]: value }));
+
     // Apply changes immediately to the parent component
     switch (key) {
-      case 'startupApps':
-        onStartupAppsChange?.(value as string[])
-        break
-      case 'animationsEnabled':
-        onAnimationsChange?.(value as boolean)
-        break
-      case 'masterVolume':
-        onVolumeChange?.(value as number)
-        break
-      case 'showNotifications':
-      case 'notificationPosition':
-      case 'autoHideNotifications':
-      case 'notificationDuration':
+      case "startupApps":
+        onStartupAppsChange?.(value as string[]);
+        break;
+      case "animationsEnabled":
+        onAnimationsChange?.(value as boolean);
+        break;
+      case "masterVolume":
+        onVolumeChange?.(value as number);
+        break;
+      case "showNotifications":
+      case "notificationPosition":
+      case "autoHideNotifications":
+      case "notificationDuration":
         onNotificationSettingsChange?.({
-          showNotifications: key === 'showNotifications' ? value : settings.showNotifications,
-          notificationPosition: key === 'notificationPosition' ? value : settings.notificationPosition,
-          autoHideNotifications: key === 'autoHideNotifications' ? value : settings.autoHideNotifications,
-          notificationDuration: key === 'notificationDuration' ? value : settings.notificationDuration,
-        })
-        break
+          showNotifications:
+            key === "showNotifications" ? value : settings.showNotifications,
+          notificationPosition:
+            key === "notificationPosition"
+              ? value
+              : settings.notificationPosition,
+          autoHideNotifications:
+            key === "autoHideNotifications"
+              ? value
+              : settings.autoHideNotifications,
+          notificationDuration:
+            key === "notificationDuration"
+              ? value
+              : settings.notificationDuration,
+        });
+        break;
     }
-  }
+  };
 
   const saveSettings = async () => {
     try {
-      localStorage.setItem('mbx-settings', JSON.stringify(settings))
+      localStorage.setItem("mbx-settings", JSON.stringify(settings));
     } catch (error) {
-      console.error('Failed to save settings:', error)
-      throw error
+      console.error("Failed to save settings:", error);
+      throw error;
     }
-  }
+  };
 
   const resetSettings = () => {
-    setSettings(defaultSettings)
-    localStorage.removeItem('mbx-settings')
-  }
+    setSettings(defaultSettings);
+    localStorage.removeItem("mbx-settings");
+  };
 
   const exportSettings = () => {
-    const dataStr = JSON.stringify(settings, null, 2)
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr)
-    
-    const exportFileDefaultName = `mbx-settings-${new Date().toISOString().split('T')[0]}.json`
-    
-    const linkElement = document.createElement('a')
-    linkElement.setAttribute('href', dataUri)
-    linkElement.setAttribute('download', exportFileDefaultName)
-    linkElement.click()
-  }
+    const dataStr = JSON.stringify(settings, null, 2);
+    const dataUri =
+      "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+
+    const exportFileDefaultName = `mbx-settings-${
+      new Date().toISOString().split("T")[0]
+    }.json`;
+
+    const linkElement = document.createElement("a");
+    linkElement.setAttribute("href", dataUri);
+    linkElement.setAttribute("download", exportFileDefaultName);
+    linkElement.click();
+  };
 
   const importSettings = (file: File) => {
-    const reader = new FileReader()
+    const reader = new FileReader();
     reader.onload = (e) => {
       try {
-        const imported = JSON.parse(e.target?.result as string)
-        setSettings({ ...defaultSettings, ...imported })
+        const imported = JSON.parse(e.target?.result as string);
+        setSettings({ ...defaultSettings, ...imported });
       } catch (error) {
-        console.error('Failed to import settings:', error)
-        throw error
+        console.error("Failed to import settings:", error);
+        throw error;
       }
-    }
-    reader.readAsText(file)
-  }
+    };
+    reader.readAsText(file);
+  };
 
   return (
     <SettingsContext.Provider
@@ -213,5 +249,5 @@ export function SettingsProvider({
     >
       {children}
     </SettingsContext.Provider>
-  )
+  );
 }

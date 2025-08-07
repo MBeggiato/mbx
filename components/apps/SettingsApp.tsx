@@ -59,7 +59,7 @@ export default function SettingsApp({ onClose }: SettingsAppProps) {
     exportSettings: exportGlobalSettings,
     importSettings: importGlobalSettings,
   } = useSettings();
-  
+
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [activeTab, setActiveTab] = useState("appearance");
   const [saveStatus, setSaveStatus] = useState<

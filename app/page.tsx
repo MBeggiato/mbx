@@ -42,7 +42,7 @@ export default function ModernOSHomepage() {
   const [masterVolume, setMasterVolume] = useState(75);
   const [notificationSettings, setNotificationSettings] = useState({
     showNotifications: true,
-    notificationPosition: 'top-right' as const,
+    notificationPosition: "top-right" as const,
     autoHideNotifications: true,
     notificationDuration: 5,
   });
@@ -557,7 +557,7 @@ export default function ModernOSHomepage() {
   const handleStartupAppsChange = (apps: string[]) => {
     setStartupApps(apps);
     // Auto-open startup apps when setting is applied
-    apps.forEach(appId => {
+    apps.forEach((appId) => {
       if (!openWindows.includes(appId)) {
         toggleWindow(appId);
       }
@@ -568,21 +568,21 @@ export default function ModernOSHomepage() {
     setAnimationsEnabled(enabled);
     // Apply animations globally
     document.documentElement.style.setProperty(
-      '--animation-duration', 
-      enabled ? '0.2s' : '0s'
+      "--animation-duration",
+      enabled ? "0.2s" : "0s"
     );
     if (enabled) {
-      document.documentElement.classList.remove('no-animations');
+      document.documentElement.classList.remove("no-animations");
     } else {
-      document.documentElement.classList.add('no-animations');
+      document.documentElement.classList.add("no-animations");
     }
   };
 
   const handleVolumeChange = (volume: number) => {
     setMasterVolume(volume);
     // Apply volume to all audio elements
-    const audioElements = document.querySelectorAll('audio');
-    audioElements.forEach(audio => {
+    const audioElements = document.querySelectorAll("audio");
+    audioElements.forEach((audio) => {
       audio.volume = volume / 100;
     });
   };
@@ -648,364 +648,368 @@ export default function ModernOSHomepage() {
           isNeonMode ? "neon-mode" : ""
         }`}
       >
-      {/* Modern Wallpaper Background */}
-      <Background />
+        {/* Modern Wallpaper Background */}
+        <Background />
 
-      {/* Desktop Icons */}
-      <Desktop
-        onToggleWindow={toggleWindow}
-        onDoubleClick={handleDesktopDoubleClick}
-      />
+        {/* Desktop Icons */}
+        <Desktop
+          onToggleWindow={toggleWindow}
+          onDoubleClick={handleDesktopDoubleClick}
+        />
 
-      {/* Share Button */}
-      {openWindows.length > 0 && (
-        <button
-          onClick={copyStateURL}
-          className="fixed top-4 right-4 z-[9999] bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md text-sm font-medium shadow-lg transition-colors"
-          title="Share desktop state"
-        >
-          📤 Share
-        </button>
-      )}
-
-      {/* Easter Egg: Secret Message */}
-      {showSecretMessage && (
-        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[10000] bg-black/90 text-green-400 p-6 rounded-lg border border-green-500 font-mono animate-pulse">
-          <div className="text-center">
-            <div className="text-2xl mb-2">🎉 KONAMI CODE ACTIVATED! 🎉</div>
-            <div className="text-sm">Welcome to the Matrix...</div>
-          </div>
-        </div>
-      )}
-
-      {/* Easter Egg: Time-based message */}
-      {getTimeBasedMessage() && (
-        <div className="fixed bottom-4 left-4 z-[9999] bg-purple-600/90 text-white px-4 py-2 rounded-lg text-sm animate-bounce">
-          {getTimeBasedMessage()}
-        </div>
-      )}
-
-      {/* Easter Egg: Party Mode Overlay */}
-      {isPartyMode && (
-        <div className="fixed inset-0 pointer-events-none z-[9998]">
-          <div
-            className={`absolute inset-0 animate-pulse ${
-              isNeonMode
-                ? "bg-gradient-to-r from-cyan-500/30 to-purple-500/30"
-                : "bg-gradient-to-r from-red-500/20 to-pink-500/20"
-            }`}
-          ></div>
-          <div
-            className={`absolute top-4 left-1/2 transform -translate-x-1/2 text-4xl animate-bounce ${
-              isNeonMode ? "text-cyan-400" : ""
-            }`}
+        {/* Share Button */}
+        {openWindows.length > 0 && (
+          <button
+            onClick={copyStateURL}
+            className="fixed top-4 right-4 z-[9999] bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md text-sm font-medium shadow-lg transition-colors"
+            title="Share desktop state"
           >
-            {isNeonMode ? "🌈✨ CYBER PARTY! ✨🌈" : "🎉 PARTY MODE! 🎉"}
+            📤 Share
+          </button>
+        )}
+
+        {/* Easter Egg: Secret Message */}
+        {showSecretMessage && (
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[10000] bg-black/90 text-green-400 p-6 rounded-lg border border-green-500 font-mono animate-pulse">
+            <div className="text-center">
+              <div className="text-2xl mb-2">🎉 KONAMI CODE ACTIVATED! 🎉</div>
+              <div className="text-sm">Welcome to the Matrix...</div>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Easter Egg: Neon Mode CSS */}
-      {isNeonMode && (
-        <style jsx>{`
-          .neon-mode {
-            background: linear-gradient(
-              45deg,
-              #000428,
-              #004e92,
-              #009ffd,
-              #00d2ff
-            ) !important;
-            background-size: 400% 400% !important;
-            animation: neonGradient 4s ease-in-out infinite !important;
-          }
-          .neon-mode * {
-            text-shadow: 0 0 10px #00d2ff, 0 0 20px #00d2ff, 0 0 30px #00d2ff !important;
-            border-color: #00d2ff !important;
-          }
-          .neon-mode .bg-white {
-            background: rgba(0, 210, 255, 0.1) !important;
-            backdrop-filter: blur(10px) !important;
-            border: 1px solid #00d2ff !important;
-          }
-          @keyframes neonGradient {
-            0%,
-            100% {
-              background-position: 0% 50%;
+        {/* Easter Egg: Time-based message */}
+        {getTimeBasedMessage() && (
+          <div className="fixed bottom-4 left-4 z-[9999] bg-purple-600/90 text-white px-4 py-2 rounded-lg text-sm animate-bounce">
+            {getTimeBasedMessage()}
+          </div>
+        )}
+
+        {/* Easter Egg: Party Mode Overlay */}
+        {isPartyMode && (
+          <div className="fixed inset-0 pointer-events-none z-[9998]">
+            <div
+              className={`absolute inset-0 animate-pulse ${
+                isNeonMode
+                  ? "bg-gradient-to-r from-cyan-500/30 to-purple-500/30"
+                  : "bg-gradient-to-r from-red-500/20 to-pink-500/20"
+              }`}
+            ></div>
+            <div
+              className={`absolute top-4 left-1/2 transform -translate-x-1/2 text-4xl animate-bounce ${
+                isNeonMode ? "text-cyan-400" : ""
+              }`}
+            >
+              {isNeonMode ? "🌈✨ CYBER PARTY! ✨🌈" : "🎉 PARTY MODE! 🎉"}
+            </div>
+          </div>
+        )}
+
+        {/* Easter Egg: Neon Mode CSS */}
+        {isNeonMode && (
+          <style jsx>{`
+            .neon-mode {
+              background: linear-gradient(
+                45deg,
+                #000428,
+                #004e92,
+                #009ffd,
+                #00d2ff
+              ) !important;
+              background-size: 400% 400% !important;
+              animation: neonGradient 4s ease-in-out infinite !important;
             }
-            50% {
-              background-position: 100% 50%;
+            .neon-mode * {
+              text-shadow: 0 0 10px #00d2ff, 0 0 20px #00d2ff, 0 0 30px #00d2ff !important;
+              border-color: #00d2ff !important;
             }
-          }
-        `}</style>
-      )}
+            .neon-mode .bg-white {
+              background: rgba(0, 210, 255, 0.1) !important;
+              backdrop-filter: blur(10px) !important;
+              border: 1px solid #00d2ff !important;
+            }
+            @keyframes neonGradient {
+              0%,
+              100% {
+                background-position: 0% 50%;
+              }
+              50% {
+                background-position: 100% 50%;
+              }
+            }
+          `}</style>
+        )}
 
-      {/* Easter Egg: Matrix Mode Background */}
-      {isMatrixMode && (
-        <div className="fixed inset-0 pointer-events-none z-[9997] bg-black/70">
-          <div className="absolute inset-0 bg-gradient-to-b from-green-900/50 to-black/50"></div>
-        </div>
-      )}
+        {/* Easter Egg: Matrix Mode Background */}
+        {isMatrixMode && (
+          <div className="fixed inset-0 pointer-events-none z-[9997] bg-black/70">
+            <div className="absolute inset-0 bg-gradient-to-b from-green-900/50 to-black/50"></div>
+          </div>
+        )}
 
-      {/* Windows */}
-      {openWindows.includes("about") && (
-        <ModernWindow
-          windowId="about"
-          title="About Me"
-          isActive={activeWindow === "about"}
-          windowState={windowStates.about}
-          onClose={() => closeWindow("about")}
-          onMinimize={() => minimizeWindow("about")}
-          onMaximize={() => maximizeWindow("about")}
-          onFocus={() => bringToFront("about")}
-          onUpdateState={(updates) => updateWindowState("about", updates)}
-        >
-          <AboutApp />
-        </ModernWindow>
-      )}
+        {/* Windows */}
+        {openWindows.includes("about") && (
+          <ModernWindow
+            windowId="about"
+            title="About Me"
+            isActive={activeWindow === "about"}
+            windowState={windowStates.about}
+            onClose={() => closeWindow("about")}
+            onMinimize={() => minimizeWindow("about")}
+            onMaximize={() => maximizeWindow("about")}
+            onFocus={() => bringToFront("about")}
+            onUpdateState={(updates) => updateWindowState("about", updates)}
+          >
+            <AboutApp />
+          </ModernWindow>
+        )}
 
-      {openWindows.includes("projects") && (
-        <ModernWindow
-          windowId="projects"
-          title="My Projects"
-          isActive={activeWindow === "projects"}
-          windowState={windowStates.projects}
-          onClose={() => closeWindow("projects")}
-          onMinimize={() => minimizeWindow("projects")}
-          onMaximize={() => maximizeWindow("projects")}
-          onFocus={() => bringToFront("projects")}
-          onUpdateState={(updates) => updateWindowState("projects", updates)}
-        >
-          <ProjectsApp />
-        </ModernWindow>
-      )}
+        {openWindows.includes("projects") && (
+          <ModernWindow
+            windowId="projects"
+            title="My Projects"
+            isActive={activeWindow === "projects"}
+            windowState={windowStates.projects}
+            onClose={() => closeWindow("projects")}
+            onMinimize={() => minimizeWindow("projects")}
+            onMaximize={() => maximizeWindow("projects")}
+            onFocus={() => bringToFront("projects")}
+            onUpdateState={(updates) => updateWindowState("projects", updates)}
+          >
+            <ProjectsApp />
+          </ModernWindow>
+        )}
 
-      {openWindows.includes("contact") && (
-        <ModernWindow
-          windowId="contact"
-          title="Contact Information"
-          isActive={activeWindow === "contact"}
-          windowState={windowStates.contact}
-          onClose={() => closeWindow("contact")}
-          onMinimize={() => minimizeWindow("contact")}
-          onMaximize={() => maximizeWindow("contact")}
-          onFocus={() => bringToFront("contact")}
-          onUpdateState={(updates) => updateWindowState("contact", updates)}
-        >
-          <ContactApp />
-        </ModernWindow>
-      )}
+        {openWindows.includes("contact") && (
+          <ModernWindow
+            windowId="contact"
+            title="Contact Information"
+            isActive={activeWindow === "contact"}
+            windowState={windowStates.contact}
+            onClose={() => closeWindow("contact")}
+            onMinimize={() => minimizeWindow("contact")}
+            onMaximize={() => maximizeWindow("contact")}
+            onFocus={() => bringToFront("contact")}
+            onUpdateState={(updates) => updateWindowState("contact", updates)}
+          >
+            <ContactApp />
+          </ModernWindow>
+        )}
 
-      {openWindows.includes("guestbook") && (
-        <ModernWindow
-          windowId="guestbook"
-          title="Guest Book"
-          isActive={activeWindow === "guestbook"}
-          windowState={windowStates.guestbook}
-          onClose={() => closeWindow("guestbook")}
-          onMinimize={() => minimizeWindow("guestbook")}
-          onMaximize={() => maximizeWindow("guestbook")}
-          onFocus={() => bringToFront("guestbook")}
-          onUpdateState={(updates) => updateWindowState("guestbook", updates)}
-        >
-          <GuestbookApp />
-        </ModernWindow>
-      )}
+        {openWindows.includes("guestbook") && (
+          <ModernWindow
+            windowId="guestbook"
+            title="Guest Book"
+            isActive={activeWindow === "guestbook"}
+            windowState={windowStates.guestbook}
+            onClose={() => closeWindow("guestbook")}
+            onMinimize={() => minimizeWindow("guestbook")}
+            onMaximize={() => maximizeWindow("guestbook")}
+            onFocus={() => bringToFront("guestbook")}
+            onUpdateState={(updates) => updateWindowState("guestbook", updates)}
+          >
+            <GuestbookApp />
+          </ModernWindow>
+        )}
 
-      {openWindows.includes("calculator") && (
-        <ModernWindow
-          windowId="calculator"
-          title="Calculator"
-          isActive={activeWindow === "calculator"}
-          windowState={windowStates.calculator}
-          onClose={() => closeWindow("calculator")}
-          onMinimize={() => minimizeWindow("calculator")}
-          onMaximize={() => maximizeWindow("calculator")}
-          onFocus={() => bringToFront("calculator")}
-          onUpdateState={(updates) => updateWindowState("calculator", updates)}
-        >
-          <CalculatorApp />
-        </ModernWindow>
-      )}
+        {openWindows.includes("calculator") && (
+          <ModernWindow
+            windowId="calculator"
+            title="Calculator"
+            isActive={activeWindow === "calculator"}
+            windowState={windowStates.calculator}
+            onClose={() => closeWindow("calculator")}
+            onMinimize={() => minimizeWindow("calculator")}
+            onMaximize={() => maximizeWindow("calculator")}
+            onFocus={() => bringToFront("calculator")}
+            onUpdateState={(updates) =>
+              updateWindowState("calculator", updates)
+            }
+          >
+            <CalculatorApp />
+          </ModernWindow>
+        )}
 
-      {openWindows.includes("changelog") && (
-        <ModernWindow
-          windowId="changelog"
-          title="Changelog"
-          isActive={activeWindow === "changelog"}
-          windowState={windowStates.changelog}
-          onClose={() => closeWindow("changelog")}
-          onMinimize={() => minimizeWindow("changelog")}
-          onMaximize={() => maximizeWindow("changelog")}
-          onFocus={() => bringToFront("changelog")}
-          onUpdateState={(updates) => updateWindowState("changelog", updates)}
-        >
-          <ChangelogApp />
-        </ModernWindow>
-      )}
+        {openWindows.includes("changelog") && (
+          <ModernWindow
+            windowId="changelog"
+            title="Changelog"
+            isActive={activeWindow === "changelog"}
+            windowState={windowStates.changelog}
+            onClose={() => closeWindow("changelog")}
+            onMinimize={() => minimizeWindow("changelog")}
+            onMaximize={() => maximizeWindow("changelog")}
+            onFocus={() => bringToFront("changelog")}
+            onUpdateState={(updates) => updateWindowState("changelog", updates)}
+          >
+            <ChangelogApp />
+          </ModernWindow>
+        )}
 
-      {openWindows.includes("settings") && (
-        <ModernWindow
-          windowId="settings"
-          title="Settings"
-          isActive={activeWindow === "settings"}
-          windowState={windowStates.settings}
-          onClose={() => closeWindow("settings")}
-          onMinimize={() => minimizeWindow("settings")}
-          onMaximize={() => maximizeWindow("settings")}
-          onFocus={() => bringToFront("settings")}
-          onUpdateState={(updates) => updateWindowState("settings", updates)}
-        >
-          <SettingsApp />
-        </ModernWindow>
-      )}
+        {openWindows.includes("settings") && (
+          <ModernWindow
+            windowId="settings"
+            title="Settings"
+            isActive={activeWindow === "settings"}
+            windowState={windowStates.settings}
+            onClose={() => closeWindow("settings")}
+            onMinimize={() => minimizeWindow("settings")}
+            onMaximize={() => maximizeWindow("settings")}
+            onFocus={() => bringToFront("settings")}
+            onUpdateState={(updates) => updateWindowState("settings", updates)}
+          >
+            <SettingsApp />
+          </ModernWindow>
+        )}
 
-      {openWindows.includes("musicpro") && (
-        <ModernWindow
-          windowId="musicpro"
-          title="Music Player Pro"
-          isActive={activeWindow === "musicpro"}
-          windowState={windowStates.musicpro}
-          onClose={() => closeWindow("musicpro")}
-          onMinimize={() => minimizeWindow("musicpro")}
-          onMaximize={() => maximizeWindow("musicpro")}
-          onFocus={() => bringToFront("musicpro")}
-          onUpdateState={(updates) => updateWindowState("musicpro", updates)}
-        >
-          <MusicPlayerAppPro />
-        </ModernWindow>
-      )}
+        {openWindows.includes("musicpro") && (
+          <ModernWindow
+            windowId="musicpro"
+            title="Music Player Pro"
+            isActive={activeWindow === "musicpro"}
+            windowState={windowStates.musicpro}
+            onClose={() => closeWindow("musicpro")}
+            onMinimize={() => minimizeWindow("musicpro")}
+            onMaximize={() => maximizeWindow("musicpro")}
+            onFocus={() => bringToFront("musicpro")}
+            onUpdateState={(updates) => updateWindowState("musicpro", updates)}
+          >
+            <MusicPlayerAppPro />
+          </ModernWindow>
+        )}
 
-      {openWindows.includes("photos") && (
-        <ModernWindow
-          windowId="photos"
-          title="Photo Viewer"
-          isActive={activeWindow === "photos"}
-          windowState={windowStates.photos}
-          onClose={() => closeWindow("photos")}
-          onMinimize={() => minimizeWindow("photos")}
-          onMaximize={() => maximizeWindow("photos")}
-          onFocus={() => bringToFront("photos")}
-          onUpdateState={(updates) => updateWindowState("photos", updates)}
-        >
-          <PhotoViewerApp />
-        </ModernWindow>
-      )}
+        {openWindows.includes("photos") && (
+          <ModernWindow
+            windowId="photos"
+            title="Photo Viewer"
+            isActive={activeWindow === "photos"}
+            windowState={windowStates.photos}
+            onClose={() => closeWindow("photos")}
+            onMinimize={() => minimizeWindow("photos")}
+            onMaximize={() => maximizeWindow("photos")}
+            onFocus={() => bringToFront("photos")}
+            onUpdateState={(updates) => updateWindowState("photos", updates)}
+          >
+            <PhotoViewerApp />
+          </ModernWindow>
+        )}
 
-      {openWindows.includes("games") && (
-        <ModernWindow
-          windowId="games"
-          title="Game Center"
-          isActive={activeWindow === "games"}
-          windowState={windowStates.games}
-          onClose={() => closeWindow("games")}
-          onMinimize={() => minimizeWindow("games")}
-          onMaximize={() => maximizeWindow("games")}
-          onFocus={() => bringToFront("games")}
-          onUpdateState={(updates) => updateWindowState("games", updates)}
-        >
-          <GamesApp />
-        </ModernWindow>
-      )}
+        {openWindows.includes("games") && (
+          <ModernWindow
+            windowId="games"
+            title="Game Center"
+            isActive={activeWindow === "games"}
+            windowState={windowStates.games}
+            onClose={() => closeWindow("games")}
+            onMinimize={() => minimizeWindow("games")}
+            onMaximize={() => maximizeWindow("games")}
+            onFocus={() => bringToFront("games")}
+            onUpdateState={(updates) => updateWindowState("games", updates)}
+          >
+            <GamesApp />
+          </ModernWindow>
+        )}
 
-      {openWindows.includes("browser") && (
-        <ModernWindow
-          windowId="browser"
-          title="Mbx Browser"
-          isActive={activeWindow === "browser"}
-          windowState={windowStates.browser}
-          onClose={() => closeWindow("browser")}
-          onMinimize={() => minimizeWindow("browser")}
-          onMaximize={() => maximizeWindow("browser")}
-          onFocus={() => bringToFront("browser")}
-          onUpdateState={(updates) => updateWindowState("browser", updates)}
-        >
-          <BrowserApp />
-        </ModernWindow>
-      )}
+        {openWindows.includes("browser") && (
+          <ModernWindow
+            windowId="browser"
+            title="Mbx Browser"
+            isActive={activeWindow === "browser"}
+            windowState={windowStates.browser}
+            onClose={() => closeWindow("browser")}
+            onMinimize={() => minimizeWindow("browser")}
+            onMaximize={() => maximizeWindow("browser")}
+            onFocus={() => bringToFront("browser")}
+            onUpdateState={(updates) => updateWindowState("browser", updates)}
+          >
+            <BrowserApp />
+          </ModernWindow>
+        )}
 
-      {openWindows.includes("downloads") && (
-        <ModernWindow
-          windowId="downloads"
-          title="Downloads"
-          isActive={activeWindow === "downloads"}
-          windowState={windowStates.downloads}
-          onClose={() => closeWindow("downloads")}
-          onMinimize={() => minimizeWindow("downloads")}
-          onMaximize={() => maximizeWindow("downloads")}
-          onFocus={() => bringToFront("downloads")}
-          onUpdateState={(updates) => updateWindowState("downloads", updates)}
-        >
-          <DownloadsApp />
-        </ModernWindow>
-      )}
+        {openWindows.includes("downloads") && (
+          <ModernWindow
+            windowId="downloads"
+            title="Downloads"
+            isActive={activeWindow === "downloads"}
+            windowState={windowStates.downloads}
+            onClose={() => closeWindow("downloads")}
+            onMinimize={() => minimizeWindow("downloads")}
+            onMaximize={() => maximizeWindow("downloads")}
+            onFocus={() => bringToFront("downloads")}
+            onUpdateState={(updates) => updateWindowState("downloads", updates)}
+          >
+            <DownloadsApp />
+          </ModernWindow>
+        )}
 
-      {openWindows.includes("markdown") && (
-        <ModernWindow
-          windowId="markdown"
-          title="Markdown Editor"
-          isActive={activeWindow === "markdown"}
-          windowState={windowStates.markdown}
-          onClose={() => closeWindow("markdown")}
-          onMinimize={() => minimizeWindow("markdown")}
-          onMaximize={() => maximizeWindow("markdown")}
-          onFocus={() => bringToFront("markdown")}
-          onUpdateState={(updates) => updateWindowState("markdown", updates)}
-        >
-          <MarkdownEditorApp />
-        </ModernWindow>
-      )}
+        {openWindows.includes("markdown") && (
+          <ModernWindow
+            windowId="markdown"
+            title="Markdown Editor"
+            isActive={activeWindow === "markdown"}
+            windowState={windowStates.markdown}
+            onClose={() => closeWindow("markdown")}
+            onMinimize={() => minimizeWindow("markdown")}
+            onMaximize={() => maximizeWindow("markdown")}
+            onFocus={() => bringToFront("markdown")}
+            onUpdateState={(updates) => updateWindowState("markdown", updates)}
+          >
+            <MarkdownEditorApp />
+          </ModernWindow>
+        )}
 
-      {openWindows.includes("secret") && (
-        <ModernWindow
-          windowId="secret"
-          title="🔍 Secret Console"
-          isActive={activeWindow === "secret"}
-          windowState={windowStates.secret}
-          onClose={() => closeWindow("secret")}
-          onMinimize={() => minimizeWindow("secret")}
-          onMaximize={() => maximizeWindow("secret")}
-          onFocus={() => bringToFront("secret")}
-          onUpdateState={(updates) => updateWindowState("secret", updates)}
-        >
-          <SecretApp />
-        </ModernWindow>
-      )}
+        {openWindows.includes("secret") && (
+          <ModernWindow
+            windowId="secret"
+            title="🔍 Secret Console"
+            isActive={activeWindow === "secret"}
+            windowState={windowStates.secret}
+            onClose={() => closeWindow("secret")}
+            onMinimize={() => minimizeWindow("secret")}
+            onMaximize={() => maximizeWindow("secret")}
+            onFocus={() => bringToFront("secret")}
+            onUpdateState={(updates) => updateWindowState("secret", updates)}
+          >
+            <SecretApp />
+          </ModernWindow>
+        )}
 
-      {openWindows.includes("filebrowser") && (
-        <ModernWindow
-          windowId="filebrowser"
-          title="📁 File Browser"
-          isActive={activeWindow === "filebrowser"}
-          windowState={windowStates.filebrowser}
-          onClose={() => closeWindow("filebrowser")}
-          onMinimize={() => minimizeWindow("filebrowser")}
-          onMaximize={() => maximizeWindow("filebrowser")}
-          onFocus={() => bringToFront("filebrowser")}
-          onUpdateState={(updates) => updateWindowState("filebrowser", updates)}
-        >
-          <FileBrowserApp />
-        </ModernWindow>
-      )}
+        {openWindows.includes("filebrowser") && (
+          <ModernWindow
+            windowId="filebrowser"
+            title="📁 File Browser"
+            isActive={activeWindow === "filebrowser"}
+            windowState={windowStates.filebrowser}
+            onClose={() => closeWindow("filebrowser")}
+            onMinimize={() => minimizeWindow("filebrowser")}
+            onMaximize={() => maximizeWindow("filebrowser")}
+            onFocus={() => bringToFront("filebrowser")}
+            onUpdateState={(updates) =>
+              updateWindowState("filebrowser", updates)
+            }
+          >
+            <FileBrowserApp />
+          </ModernWindow>
+        )}
 
-      {/* Modern Dock/Taskbar */}
-      <Taskbar
-        openWindows={openWindows}
-        activeWindow={activeWindow}
-        windowStates={windowStates}
-        onToggleWindow={toggleWindow}
-        onToggleStartMenu={toggleStartMenu}
-        isStartMenuOpen={isStartMenuOpen}
-        onLogoClick={handleLogoClick}
-        logoClickCount={logoClickCount}
-      />
+        {/* Modern Dock/Taskbar */}
+        <Taskbar
+          openWindows={openWindows}
+          activeWindow={activeWindow}
+          windowStates={windowStates}
+          onToggleWindow={toggleWindow}
+          onToggleStartMenu={toggleStartMenu}
+          isStartMenuOpen={isStartMenuOpen}
+          onLogoClick={handleLogoClick}
+          logoClickCount={logoClickCount}
+        />
 
-      {/* Start Menu */}
-      <StartMenu
-        isOpen={isStartMenuOpen}
-        onClose={() => setIsStartMenuOpen(false)}
-        onToggleWindow={toggleWindow}
-      />
+        {/* Start Menu */}
+        <StartMenu
+          isOpen={isStartMenuOpen}
+          onClose={() => setIsStartMenuOpen(false)}
+          onToggleWindow={toggleWindow}
+        />
       </div>
     </SettingsProvider>
   );
